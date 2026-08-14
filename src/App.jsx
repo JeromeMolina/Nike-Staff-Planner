@@ -1,4 +1,5 @@
 import { useState } from 'react'
+
 import {
   CalendarDays,
   Users,
@@ -10,215 +11,575 @@ import {
   Menu,
   X,
 } from 'lucide-react'
+
 import ExcelUploader from './components/ExcelUploader'
 import SchedulePreview from './components/SchedulePreview'
 import AvailabilityPreview from './components/AvailabilityPreview'
+import PlanningPreview from './components/PlanningPreview'
+
 import './App.css'
 
 function App() {
-  const [sidebarOpen, setSidebarOpen] = useState(true)
-  const [scheduleData, setScheduleData] = useState(null)
+
+  const [
+    sidebarOpen,
+    setSidebarOpen,
+  ] = useState(true)
+
+  const [
+    scheduleData,
+    setScheduleData,
+  ] = useState(null)
+
+  /*
+   * =========================================
+   * EXCEL CARGADO
+   * =========================================
+   */
 
   const handleExcelLoaded = (data) => {
+
     setScheduleData(data)
 
-    console.log('HORARIO cargado correctamente:', data)
+    console.log(
+      'HORARIO cargado correctamente:',
+      data
+    )
   }
 
   return (
+
     <div className="app">
-      <aside className={`sidebar ${sidebarOpen ? 'open' : 'closed'}`}>
+
+      {/* ========================================= */}
+      {/* SIDEBAR */}
+      {/* ========================================= */}
+
+      <aside
+        className={
+          `sidebar ${
+            sidebarOpen
+              ? 'open'
+              : 'closed'
+          }`
+        }
+      >
+
         <div className="sidebar-header">
-          <div className="nike-logo">NIKE</div>
+
+          <div className="nike-logo">
+            NIKE
+          </div>
 
           {sidebarOpen && (
+
             <span className="planner-title">
+
               STAFF
               <br />
               PLANNER
+
             </span>
+
           )}
+
         </div>
+
+        {/* ========================================= */}
+        {/* NAVEGACIÓN */}
+        {/* ========================================= */}
 
         <nav className="navigation">
-          <button className="nav-item active">
-            <CalendarDays size={20} />
-            {sidebarOpen && <span>Planificación</span>}
+
+          <button
+            type="button"
+            className="nav-item active"
+          >
+
+            <CalendarDays
+              size={20}
+            />
+
+            {sidebarOpen && (
+              <span>
+                Planificación
+              </span>
+            )}
+
           </button>
 
-          <button className="nav-item">
-            <Users size={20} />
-            {sidebarOpen && <span>Personal</span>}
+          <button
+            type="button"
+            className="nav-item"
+          >
+
+            <Users
+              size={20}
+            />
+
+            {sidebarOpen && (
+              <span>
+                Personal
+              </span>
+            )}
+
           </button>
 
-          <button className="nav-item">
-            <Clock3 size={20} />
-            {sidebarOpen && <span>Horas</span>}
+          <button
+            type="button"
+            className="nav-item"
+          >
+
+            <Clock3
+              size={20}
+            />
+
+            {sidebarOpen && (
+              <span>
+                Horas
+              </span>
+            )}
+
           </button>
 
-          <button className="nav-item">
-            <Utensils size={20} />
-            {sidebarOpen && <span>Almuerzos</span>}
+          <button
+            type="button"
+            className="nav-item"
+          >
+
+            <Utensils
+              size={20}
+            />
+
+            {sidebarOpen && (
+              <span>
+                Almuerzos
+              </span>
+            )}
+
           </button>
 
-          <button className="nav-item">
-            <Sparkles size={20} />
-            {sidebarOpen && <span>A15 / Limpieza</span>}
+          <button
+            type="button"
+            className="nav-item"
+          >
+
+            <Sparkles
+              size={20}
+            />
+
+            {sidebarOpen && (
+              <span>
+                A15 / Limpieza
+              </span>
+            )}
+
           </button>
 
-          <button className="nav-item">
-            <ClipboardList size={20} />
-            {sidebarOpen && <span>Cronograma</span>}
+          <button
+            type="button"
+            className="nav-item"
+          >
+
+            <ClipboardList
+              size={20}
+            />
+
+            {sidebarOpen && (
+              <span>
+                Cronograma
+              </span>
+            )}
+
           </button>
+
         </nav>
 
+        {/* ========================================= */}
+        {/* CONFIGURACIÓN */}
+        {/* ========================================= */}
+
         <div className="sidebar-bottom">
-          <button className="nav-item">
-            <Settings size={20} />
-            {sidebarOpen && <span>Configuración</span>}
+
+          <button
+            type="button"
+            className="nav-item"
+          >
+
+            <Settings
+              size={20}
+            />
+
+            {sidebarOpen && (
+              <span>
+                Configuración
+              </span>
+            )}
+
           </button>
+
         </div>
+
       </aside>
 
+      {/* ========================================= */}
+      {/* CONTENIDO PRINCIPAL */}
+      {/* ========================================= */}
+
       <main className="main-content">
+
+        {/* ========================================= */}
+        {/* TOPBAR */}
+        {/* ========================================= */}
+
         <header className="topbar">
+
           <button
+            type="button"
             className="menu-button"
-            onClick={() => setSidebarOpen(!sidebarOpen)}
+            onClick={() =>
+              setSidebarOpen(
+                !sidebarOpen
+              )
+            }
           >
-            {sidebarOpen ? <X size={22} /> : <Menu size={22} />}
+
+            {sidebarOpen ? (
+              <X size={22} />
+            ) : (
+              <Menu size={22} />
+            )}
+
           </button>
 
           <div>
-            <h1>Nike Staff Planner</h1>
-            <p>Gestión inteligente de planificación del personal</p>
+
+            <h1>
+              Nike Staff Planner
+            </h1>
+
+            <p>
+              Gestión inteligente de
+              planificación del personal
+            </p>
+
           </div>
+
         </header>
 
+        {/* ========================================= */}
+        {/* CONTENIDO */}
+        {/* ========================================= */}
+
         <section className="content">
+
+          {/* ========================================= */}
+          {/* BIENVENIDA */}
+          {/* ========================================= */}
+
           <div className="welcome">
+
             <div>
-              <span className="eyebrow">PLANIFICACIÓN SEMANAL</span>
-              <h2>Quicentro</h2>
+
+              <span className="eyebrow">
+                PLANIFICACIÓN SEMANAL
+              </span>
+
+              <h2>
+                Quicentro
+              </h2>
+
               <p>
-                Organiza las actividades del equipo de forma rápida y
-                eficiente.
+                Organiza las actividades
+                del equipo de forma rápida
+                y eficiente.
               </p>
+
             </div>
 
-            <ExcelUploader onDataLoaded={handleExcelLoaded} />
+            <ExcelUploader
+              onDataLoaded={
+                handleExcelLoaded
+              }
+            />
+
           </div>
+
+          {/* ========================================= */}
+          {/* ESTADÍSTICAS */}
+          {/* ========================================= */}
 
           <div className="stats-grid">
+
+            {/* PERSONAL */}
+
             <div className="stat-card">
+
               <div className="stat-icon">
-                <Users size={22} />
+
+                <Users
+                  size={22}
+                />
+
               </div>
 
               <div>
-                <span>Personal</span>
-                <strong>{scheduleData ? scheduleData.employees.length : 0}</strong>
-                <small>Colaboradores activos</small>
+
+                <span>
+                  Personal
+                </span>
+
+                <strong>
+
+                  {scheduleData
+                    ? scheduleData
+                      .employees
+                      .length
+                    : 0}
+
+                </strong>
+
+                <small>
+                  Colaboradores activos
+                </small>
+
               </div>
+
             </div>
 
+            {/* HORAS */}
+
             <div className="stat-card">
+
               <div className="stat-icon">
-                <Clock3 size={22} />
+
+                <Clock3
+                  size={22}
+                />
+
               </div>
 
               <div>
-                <span>Horas planificadas</span>
+
+                <span>
+                  Horas planificadas
+                </span>
+
                 <strong>
+
                   {scheduleData
                     ? scheduleData.employees.reduce(
-                      (total, employee) => total + employee.weeklyHours,
+                      (
+                        total,
+                        employee
+                      ) =>
+                        total +
+                        (
+                          employee.weeklyHours ||
+                          0
+                        ),
                       0
                     )
-                    : 0}{' '}
-                  h
+                    : 0}
+
+                  {' '}h
+
                 </strong>
-                <small>Esta semana</small>
+
+                <small>
+                  Esta semana
+                </small>
+
               </div>
+
             </div>
 
+            {/* ALMUERZOS */}
+
             <div className="stat-card">
+
               <div className="stat-icon">
-                <Utensils size={22} />
+
+                <Utensils
+                  size={22}
+                />
+
               </div>
 
               <div>
-                <span>Almuerzos</span>
-                <strong>-</strong>
-                <small>Turnos asignados</small>
+
+                <span>
+                  Almuerzos
+                </span>
+
+                <strong>
+                  -
+                </strong>
+
+                <small>
+                  Turnos asignados
+                </small>
+
               </div>
+
             </div>
 
+            {/* ACTIVIDADES */}
+
             <div className="stat-card">
+
               <div className="stat-icon">
-                <Sparkles size={22} />
+
+                <Sparkles
+                  size={22}
+                />
+
               </div>
 
               <div>
-                <span>Actividades</span>
-                <strong>-</strong>
-                <small>A15 y limpieza</small>
+
+                <span>
+                  Actividades
+                </span>
+
+                <strong>
+                  -
+                </strong>
+
+                <small>
+                  A15 y limpieza
+                </small>
+
               </div>
+
             </div>
+
           </div>
 
+          {/* ========================================= */}
+          {/* SEMANA */}
+          {/* ========================================= */}
+
           <section className="panel">
+
             <div className="panel-header">
+
               <div>
-                <h3>Semana actual</h3>
+
+                <h3>
+                  Semana actual
+                </h3>
+
                 <p>
+
                   {scheduleData
                     ? 'Horario importado correctamente'
                     : 'Planificación del equipo'}
+
                 </p>
+
               </div>
 
               <div className="week-selector">
-                <CalendarDays size={18} />
+
+                <CalendarDays
+                  size={18}
+                />
+
                 <span>
+
                   {scheduleData
-                    ? `${scheduleData.weekInfo.days[0].date} ${scheduleData.weekInfo.month} — ${scheduleData.weekInfo.days[6].date
-                    } ${scheduleData.weekInfo.month}`
+                    ? `${scheduleData.weekInfo.days[0].date} ${scheduleData.weekInfo.month} — ${scheduleData.weekInfo.days[6].date} ${scheduleData.weekInfo.month}`
                     : 'Sin horario importado'}
+
                 </span>
+
               </div>
+
             </div>
 
             <div className="empty-schedule">
-              <CalendarDays size={42} />
+
+              <CalendarDays
+                size={42}
+              />
 
               <h3>
+
                 {scheduleData
                   ? 'Horario cargado correctamente'
                   : 'Aún no existe una planificación'}
+
               </h3>
 
               <p>
+
                 {scheduleData
-                  ? 'El archivo HORARIO fue leído correctamente. El siguiente paso será interpretar los colaboradores y sus turnos.'
+                  ? 'El archivo HORARIO fue leído correctamente. Ahora podemos generar automáticamente la planificación.'
                   : 'Importa el horario Excel para comenzar a generar la planificación automáticamente.'}
+
               </p>
 
               {!scheduleData && (
-                <ExcelUploader onDataLoaded={handleExcelLoaded} />
+
+                <ExcelUploader
+                  onDataLoaded={
+                    handleExcelLoaded
+                  }
+                />
+
               )}
+
             </div>
+
           </section>
+
+          {/* ========================================= */}
+          {/* HORARIO */}
+          {/* ========================================= */}
+
           {scheduleData && (
-            <SchedulePreview employees={scheduleData.employees} />
-          )}
-          {scheduleData && (
-            <AvailabilityPreview
-              employees={scheduleData.employees}
+
+            <SchedulePreview
+              employees={
+                scheduleData.employees
+              }
             />
+
           )}
+
+          {/* ========================================= */}
+          {/* DISPONIBILIDAD + ALMUERZOS */}
+          {/* ========================================= */}
+
+          {scheduleData && (
+
+            <AvailabilityPreview
+              employees={
+                scheduleData.employees
+              }
+            />
+
+          )}
+
+          {/* ========================================= */}
+          {/* PLANIFICACIÓN */}
+          {/* ========================================= */}
+
+          {scheduleData && (
+
+            <PlanningPreview
+              employees={
+                scheduleData.employees
+              }
+            />
+
+          )}
+
         </section>
+
       </main>
+
     </div>
   )
 }
