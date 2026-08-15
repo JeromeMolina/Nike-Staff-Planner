@@ -3679,3 +3679,2514 @@ body,
   }
 
 }
+
+/* =========================================================
+   IMPRESIÓN PROFESIONAL
+========================================================= */
+
+.professional-print {
+    display: none;
+}
+
+
+/* =========================================================
+   CONFIGURACIÓN DE IMPRESIÓN
+========================================================= */
+
+@media print {
+
+    @page {
+        size: A4 portrait;
+        margin: 0;
+    }
+
+
+    /* Ocultar aplicación */
+
+    body {
+        margin: 0;
+        padding: 0;
+        background: white !important;
+    }
+
+    .app {
+        display: none !important;
+    }
+
+
+    /* Mostrar impresión */
+
+    .professional-print {
+        display: block !important;
+        width: 210mm;
+        background: white;
+        color: #111;
+        font-family: Arial, Helvetica, sans-serif;
+    }
+
+
+    /* =====================================================
+       PÁGINAS
+    ===================================================== */
+
+    .print-page {
+        position: relative;
+
+        width: 210mm;
+        height: 297mm;
+
+        box-sizing: border-box;
+
+        padding:
+            15mm
+            15mm
+            14mm
+            15mm;
+
+        background: white;
+
+        overflow: hidden;
+    }
+
+
+    .print-page-1 {
+        page-break-after: always;
+        break-after: page;
+    }
+
+
+    .print-page-2 {
+        page-break-after: auto;
+        break-after: auto;
+    }
+
+
+    /* =====================================================
+       HEADER
+    ===================================================== */
+
+    .print-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        padding-bottom: 8mm;
+
+        border-bottom: 2px solid #111;
+
+        margin-bottom: 8mm;
+    }
+
+
+    .print-brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+
+    .print-nike {
+        font-size: 23px;
+        font-weight: 900;
+        font-style: italic;
+        letter-spacing: -1px;
+    }
+
+
+    .print-brand-divider {
+        width: 1px;
+        height: 32px;
+        background: #bbb;
+    }
+
+
+    .print-brand h1 {
+        margin: 0;
+
+        font-size: 15px;
+        font-weight: 800;
+        letter-spacing: 1.2px;
+    }
+
+
+    .print-brand span {
+        display: block;
+
+        margin-top: 2px;
+
+        font-size: 9px;
+        color: #666;
+    }
+
+
+    .print-document-info {
+        text-align: right;
+    }
+
+
+    .print-document-info strong {
+        display: block;
+
+        font-size: 9px;
+        letter-spacing: 1px;
+    }
+
+
+    .print-document-info span {
+        display: block;
+
+        margin-top: 3px;
+
+        font-size: 8px;
+        color: #777;
+    }
+
+
+    /* =====================================================
+       TITULOS
+    ===================================================== */
+
+    .print-title-block {
+        margin-bottom: 7mm;
+    }
+
+
+    .print-title-block > span {
+        font-size: 8px;
+        font-weight: 700;
+        letter-spacing: 1.5px;
+        color: #777;
+    }
+
+
+    .print-title-block h2 {
+        margin: 3px 0 2px;
+
+        font-size: 20px;
+        font-weight: 800;
+    }
+
+
+    .print-title-block p {
+        margin: 0;
+
+        font-size: 9px;
+        color: #666;
+    }
+
+
+    /* =====================================================
+       TABLAS
+    ===================================================== */
+
+    .print-table-container {
+        width: 100%;
+    }
+
+
+    .print-table {
+        width: 100%;
+
+        border-collapse: collapse;
+
+        table-layout: fixed;
+
+        font-size: 9px;
+    }
+
+
+    .print-table th {
+        padding: 7px 6px;
+
+        background: #111;
+        color: white;
+
+        border: 1px solid #111;
+
+        text-align: left;
+
+        font-size: 8px;
+        font-weight: 700;
+
+        letter-spacing: .6px;
+    }
+
+
+    .print-table td {
+        padding: 7px 6px;
+
+        border: 1px solid #d5d5d5;
+
+        vertical-align: middle;
+
+        line-height: 1.25;
+    }
+
+
+    .print-table tbody tr:nth-child(even) {
+        background: #f7f7f7;
+    }
+
+
+    .day-cell {
+        font-weight: 700;
+
+        width: 17%;
+    }
+
+
+    .empty-cell {
+        color: #999;
+        font-style: italic;
+    }
+
+
+    /* =====================================================
+       TABLA ACTIVIDADES
+    ===================================================== */
+
+    .activities-table th:first-child {
+        width: 17%;
+    }
+
+
+    .activities-table th:nth-child(2),
+    .activities-table th:nth-child(3) {
+        width: 41.5%;
+    }
+
+
+    .activities-table td {
+        height: 22mm;
+    }
+
+
+    /* =====================================================
+       SECCIONES PÁGINA 2
+    ===================================================== */
+
+    .print-section {
+        margin-bottom: 7mm;
+    }
+
+
+    .print-section-title {
+        display: flex;
+        align-items: center;
+
+        gap: 8px;
+
+        margin-bottom: 4mm;
+    }
+
+
+    .print-section-number {
+        display: flex;
+
+        align-items: center;
+        justify-content: center;
+
+        width: 25px;
+        height: 25px;
+
+        background: #111;
+        color: white;
+
+        font-size: 9px;
+        font-weight: 800;
+    }
+
+
+    .print-section-title span {
+        display: block;
+
+        font-size: 7px;
+        font-weight: 700;
+
+        letter-spacing: 1.2px;
+
+        color: #777;
+    }
+
+
+    .print-section-title h2 {
+        margin: 1px 0 0;
+
+        font-size: 14px;
+        font-weight: 800;
+    }
+
+
+    /* =====================================================
+       TABLA ALMUERZOS
+    ===================================================== */
+
+    .lunch-print-table {
+        font-size: 7.5px;
+    }
+
+
+    .lunch-print-table th {
+        text-align: center;
+        padding: 5px 3px;
+        font-size: 7px;
+    }
+
+
+    .lunch-print-table td {
+        padding: 5px 3px;
+        text-align: center;
+    }
+
+
+    .lunch-print-table .day-cell {
+        text-align: left;
+    }
+
+
+    .lunch-print-table small {
+        font-size: 6px;
+        font-weight: normal;
+    }
+
+
+    /* =====================================================
+       TABLA ZONAS
+    ===================================================== */
+
+    .zones-print-section {
+        margin-top: 6mm;
+    }
+
+
+    .zones-print-table {
+        font-size: 8px;
+    }
+
+
+    .zones-print-table th,
+    .zones-print-table td {
+        padding: 5px 6px;
+    }
+
+
+    /* =====================================================
+       FOOTER
+    ===================================================== */
+
+    .print-footer {
+        position: absolute;
+
+        left: 15mm;
+        right: 15mm;
+        bottom: 7mm;
+
+        display: flex;
+        justify-content: space-between;
+
+        padding-top: 4mm;
+
+        border-top: 1px solid #ddd;
+
+        font-size: 7px;
+        color: #777;
+    }
+
+
+    /* =====================================================
+       EVITAR CORTES
+    ===================================================== */
+
+    .print-table,
+    .print-section,
+    .print-header {
+        page-break-inside: avoid;
+        break-inside: avoid;
+    }
+
+}
+
+/* =========================================================
+   IMPRESIÓN PROFESIONAL
+   NIKE STAFF PLANNER
+========================================================= */
+
+.print-planning {
+    display: none;
+}
+
+
+/* =========================================================
+   CONFIGURACIÓN DE PAPEL
+========================================================= */
+
+@page {
+    size: A4 portrait;
+    margin: 10mm;
+}
+
+
+/* =========================================================
+   MODO IMPRESIÓN
+========================================================= */
+
+@media print {
+
+    html,
+    body {
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 100%;
+        background: #ffffff !important;
+    }
+
+
+    body {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+
+
+    /* Ocultar aplicación */
+
+    .sidebar,
+    .topbar,
+    .menu-button,
+    .content > *:not(.planning-preview),
+    .planning-preview > *:not(.print-planning) {
+        display: none !important;
+    }
+
+
+    .app,
+    .main-content,
+    .content,
+    .planning-preview {
+        display: block !important;
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        background: #ffffff !important;
+        box-shadow: none !important;
+    }
+
+
+    /* Mostrar documento */
+
+    .print-planning {
+        display: block !important;
+        width: 100%;
+        background: #ffffff;
+        color: #111111;
+    }
+
+
+    /* =====================================================
+       PÁGINAS
+    ===================================================== */
+
+    .print-page {
+        position: relative;
+
+        width: 100%;
+
+        min-height: 277mm;
+
+        box-sizing: border-box;
+
+        background: #ffffff;
+
+        page-break-after: always;
+
+        break-after: page;
+
+        overflow: hidden;
+    }
+
+
+    .print-page:last-child {
+        page-break-after: auto;
+        break-after: auto;
+    }
+
+
+    /* =====================================================
+       ENCABEZADO
+    ===================================================== */
+
+    .print-header {
+
+        display: flex;
+
+        justify-content: space-between;
+
+        align-items: flex-start;
+
+        padding-bottom: 7px;
+
+        margin-bottom: 10px;
+
+        border-bottom: 2px solid #111111;
+    }
+
+
+    .print-brand {
+
+        display: flex;
+
+        align-items: center;
+
+        gap: 10px;
+    }
+
+
+    .print-nike {
+
+        font-family: Arial, Helvetica, sans-serif;
+
+        font-size: 21px;
+
+        font-weight: 900;
+
+        letter-spacing: -1px;
+
+        font-style: italic;
+    }
+
+
+    .print-brand-divider {
+
+        width: 1px;
+
+        height: 32px;
+
+        background: #cfcfcf;
+    }
+
+
+    .print-brand div:last-child {
+
+        display: flex;
+
+        flex-direction: column;
+
+        gap: 2px;
+    }
+
+
+    .print-brand strong {
+
+        font-size: 10px;
+
+        letter-spacing: 1.4px;
+    }
+
+
+    .print-brand span {
+
+        font-size: 8px;
+
+        color: #666666;
+
+        letter-spacing: 1px;
+    }
+
+
+    .print-document-info {
+
+        display: flex;
+
+        flex-direction: column;
+
+        align-items: flex-end;
+
+        gap: 2px;
+
+        text-align: right;
+    }
+
+
+    .print-document-info span {
+
+        font-size: 7px;
+
+        color: #777777;
+
+        letter-spacing: 1.3px;
+
+        font-weight: 700;
+    }
+
+
+    .print-document-info strong {
+
+        font-size: 10px;
+
+        letter-spacing: .7px;
+    }
+
+
+    .print-document-info small {
+
+        font-size: 7px;
+
+        color: #777777;
+    }
+
+
+    /* =====================================================
+       TÍTULO
+    ===================================================== */
+
+    .print-page-title {
+
+        display: flex;
+
+        align-items: center;
+
+        gap: 9px;
+
+        margin-bottom: 10px;
+    }
+
+
+    .print-title-icon {
+
+        width: 34px;
+
+        height: 34px;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        border-radius: 8px;
+    }
+
+
+    .activities-print-icon {
+
+        background: #fff1e8;
+
+        color: #ea580c;
+
+        border: 1px solid #fed7aa;
+    }
+
+
+    .operations-print-icon {
+
+        background: #eef2ff;
+
+        color: #4f46e5;
+
+        border: 1px solid #c7d2fe;
+    }
+
+
+    .print-page-title h1 {
+
+        margin: 0;
+
+        font-size: 17px;
+
+        line-height: 1.1;
+
+        letter-spacing: -.3px;
+    }
+
+
+    .print-page-title p {
+
+        margin: 3px 0 0;
+
+        font-size: 8px;
+
+        color: #666666;
+    }
+
+
+    /* =====================================================
+       SECCIONES
+    ===================================================== */
+
+    .print-table-section {
+
+        margin-bottom: 10px;
+
+        page-break-inside: avoid;
+
+        break-inside: avoid;
+    }
+
+
+    .print-section-title {
+
+        display: flex;
+
+        align-items: center;
+
+        gap: 7px;
+
+        margin-bottom: 5px;
+    }
+
+
+    .print-section-icon {
+
+        width: 27px;
+
+        height: 27px;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        border-radius: 6px;
+    }
+
+
+    .print-section-title > div:last-child {
+
+        display: flex;
+
+        flex-direction: column;
+
+        gap: 1px;
+    }
+
+
+    .print-section-title strong {
+
+        font-size: 10px;
+    }
+
+
+    .print-section-title span {
+
+        font-size: 7px;
+
+        color: #777777;
+    }
+
+
+    /* =====================================================
+       COLORES DE SECCIONES
+    ===================================================== */
+
+    .print-a15-section {
+
+        border-left: 4px solid #f97316;
+
+        padding-left: 7px;
+    }
+
+
+    .print-a15-section
+    .print-section-icon {
+
+        background: #fff1e8;
+
+        color: #ea580c;
+
+        border: 1px solid #fed7aa;
+    }
+
+
+    .print-cleaning-section {
+
+        border-left: 4px solid #2563eb;
+
+        padding-left: 7px;
+    }
+
+
+    .print-cleaning-section
+    .print-section-icon {
+
+        background: #eff6ff;
+
+        color: #2563eb;
+
+        border: 1px solid #bfdbfe;
+    }
+
+
+    .print-lunch-section {
+
+        border-left: 4px solid #16a34a;
+
+        padding-left: 7px;
+    }
+
+
+    .print-lunch-section
+    .print-section-icon {
+
+        background: #f0fdf4;
+
+        color: #16a34a;
+
+        border: 1px solid #bbf7d0;
+    }
+
+
+    .print-zones-section {
+
+        border-left: 4px solid #7c3aed;
+
+        padding-left: 7px;
+    }
+
+
+    .print-zones-section
+    .print-section-icon {
+
+        background: #f5f3ff;
+
+        color: #7c3aed;
+
+        border: 1px solid #ddd6fe;
+    }
+
+
+    /* =====================================================
+       TABLAS BASE
+    ===================================================== */
+
+    .print-table {
+
+        width: 100%;
+
+        border-collapse: separate;
+
+        border-spacing: 0;
+
+        font-size: 7.5px;
+
+        overflow: hidden;
+
+        border: 1px solid #d7d7d7;
+
+        border-radius: 5px;
+    }
+
+
+    .print-table th {
+
+        padding: 5px 6px;
+
+        text-align: left;
+
+        font-size: 7px;
+
+        font-weight: 800;
+
+        letter-spacing: .3px;
+
+        color: #333333;
+
+        background: #f4f4f5;
+
+        border-bottom: 1px solid #d1d1d1;
+
+        vertical-align: middle;
+    }
+
+
+    .print-table td {
+
+        padding: 5px 6px;
+
+        vertical-align: middle;
+
+        border-bottom: 1px solid #e5e5e5;
+
+        color: #333333;
+    }
+
+
+    .print-table tbody tr:last-child td {
+
+        border-bottom: none;
+    }
+
+
+    .print-table tbody tr:nth-child(even) td {
+
+        background: #fafafa;
+    }
+
+
+    .print-table .day-column {
+
+        width: 12%;
+    }
+
+
+    .print-table .schedule-column {
+
+        width: 19%;
+    }
+
+
+    .print-table .status-column {
+
+        width: 15%;
+    }
+
+
+    .day-cell {
+
+        font-weight: 700;
+
+        color: #222222 !important;
+
+        background: #f7f7f7 !important;
+    }
+
+
+    .print-person-name {
+
+        font-weight: 700;
+
+        font-size: 8px;
+    }
+
+
+    .print-time {
+
+        display: inline-flex;
+
+        align-items: center;
+
+        gap: 3px;
+
+        font-size: 7px;
+
+        color: #555555;
+    }
+
+
+    .print-status {
+
+        display: inline-block;
+
+        padding: 2px 5px;
+
+        border-radius: 20px;
+
+        font-size: 6.5px;
+
+        font-weight: 700;
+    }
+
+
+    .print-status.assigned {
+
+        background: #ecfdf3;
+
+        color: #15803d;
+
+        border: 1px solid #bbf7d0;
+    }
+
+
+    .print-status.empty {
+
+        background: #f5f5f5;
+
+        color: #888888;
+
+        border: 1px solid #dddddd;
+    }
+
+
+    /* =====================================================
+       A15
+    ===================================================== */
+
+    .print-table-a15 {
+
+        border-color: #fdba74;
+    }
+
+
+    .print-table-a15 thead th {
+
+        background: #fff7ed;
+
+        color: #9a3412;
+
+        border-bottom-color: #fed7aa;
+    }
+
+
+    /* =====================================================
+       LIMPIEZA
+    ===================================================== */
+
+    .print-table-cleaning {
+
+        border-color: #93c5fd;
+    }
+
+
+    .print-table-cleaning thead th {
+
+        background: #eff6ff;
+
+        color: #1d4ed8;
+
+        border-bottom-color: #bfdbfe;
+    }
+
+
+    /* =====================================================
+       ALMUERZOS
+    ===================================================== */
+
+    .print-table-lunch {
+
+        border-color: #86efac;
+    }
+
+
+    .print-table-lunch thead th {
+
+        background: #f0fdf4;
+
+        color: #166534;
+
+        border-bottom-color: #bbf7d0;
+
+        text-align: center;
+    }
+
+
+    .print-table-lunch th:first-child {
+
+        text-align: left;
+    }
+
+
+    .print-table-lunch th span {
+
+        display: block;
+
+        font-size: 8px;
+    }
+
+
+    .print-table-lunch th small {
+
+        display: block;
+
+        margin-top: 1px;
+
+        font-size: 5.5px;
+
+        font-weight: 500;
+
+        color: #4b7d59;
+    }
+
+
+    .lunch-print-cell {
+
+        vertical-align: top !important;
+
+        min-width: 18%;
+    }
+
+
+    .print-lunch-person {
+
+        padding: 2px 3px;
+
+        margin-bottom: 2px;
+
+        border-left: 2px solid #22c55e;
+
+        background: #f7fff9;
+
+        border-radius: 2px;
+    }
+
+
+    .print-lunch-person:last-child {
+
+        margin-bottom: 0;
+    }
+
+
+    .print-lunch-person strong {
+
+        display: block;
+
+        font-size: 6.5px;
+
+        line-height: 1.1;
+    }
+
+
+    .print-lunch-person small {
+
+        display: block;
+
+        margin-top: 1px;
+
+        font-size: 5.5px;
+
+        color: #666666;
+    }
+
+
+    /* =====================================================
+       ZONAS
+    ===================================================== */
+
+    .print-table-zones {
+
+        border-color: #c4b5fd;
+    }
+
+
+    .print-table-zones thead th {
+
+        background: #f5f3ff;
+
+        color: #5b21b6;
+
+        border-bottom-color: #ddd6fe;
+
+        text-align: center;
+    }
+
+
+    .print-table-zones th:first-child {
+
+        text-align: left;
+    }
+
+
+    .print-table-zones th span {
+
+        display: block;
+
+        font-size: 7px;
+    }
+
+
+    .print-table-zones th small {
+
+        display: block;
+
+        margin-top: 2px;
+
+        font-size: 5px;
+
+        font-weight: 500;
+
+        line-height: 1.1;
+
+        color: #76689a;
+    }
+
+
+    .zone-print-cell {
+
+        vertical-align: top !important;
+
+        padding: 3px !important;
+    }
+
+
+    .print-zone-person {
+
+        padding: 2px 3px;
+
+        margin-bottom: 2px;
+
+        background: #faf8ff;
+
+        border-left: 2px solid #8b5cf6;
+
+        border-radius: 2px;
+    }
+
+
+    .print-zone-person:last-child {
+
+        margin-bottom: 0;
+    }
+
+
+    .print-zone-person strong {
+
+        display: block;
+
+        font-size: 6px;
+
+        line-height: 1.1;
+    }
+
+
+    .print-zone-person small {
+
+        display: flex;
+
+        align-items: center;
+
+        gap: 2px;
+
+        margin-top: 1px;
+
+        font-size: 5px;
+
+        color: #777777;
+    }
+
+
+    /* Diferenciación sutil de zonas */
+
+    .zone-zone1 {
+
+        background: #fffaf5 !important;
+    }
+
+
+    .zone-zone2 {
+
+        background: #f8f7ff !important;
+    }
+
+
+    .zone-zone3 {
+
+        background: #f7fbff !important;
+    }
+
+
+    .zone-zone4 {
+
+        background: #f9fdf9 !important;
+    }
+
+
+    .zone-accessories {
+
+        background: #fffaf2 !important;
+    }
+
+
+    /* =====================================================
+       VACÍOS
+    ===================================================== */
+
+    .print-empty {
+
+        color: #aaaaaa;
+
+        font-size: 8px;
+    }
+
+
+    /* =====================================================
+       PIE
+    ===================================================== */
+
+    .print-footer {
+
+        position: absolute;
+
+        left: 0;
+
+        right: 0;
+
+        bottom: 0;
+
+        display: flex;
+
+        justify-content: space-between;
+
+        padding-top: 5px;
+
+        border-top: 1px solid #dddddd;
+
+        font-size: 6.5px;
+
+        color: #777777;
+    }
+
+
+    /* =====================================================
+       AJUSTE DE SEGUNDA PÁGINA
+    ===================================================== */
+
+    .print-page-operations
+    .print-table-section {
+
+        margin-bottom: 8px;
+    }
+
+
+    .print-page-operations
+    .print-page-title {
+
+        margin-bottom: 8px;
+    }
+
+
+    .print-page-operations
+    .print-table th {
+
+        padding-top: 4px;
+
+        padding-bottom: 4px;
+    }
+
+
+    .print-page-operations
+    .print-table td {
+
+        padding-top: 4px;
+
+        padding-bottom: 4px;
+    }
+
+
+    /* =====================================================
+       EVITAR CORTES
+    ===================================================== */
+
+    table,
+    tr,
+    td,
+    th {
+
+        page-break-inside: avoid !important;
+
+        break-inside: avoid !important;
+    }
+}
+
+/* =========================================================
+   IMPRESIÓN - NIKE STAFF PLANNER
+========================================================= */
+
+@media print {
+
+    /* ---------------------------------------------------------
+       CONFIGURACIÓN GENERAL
+    --------------------------------------------------------- */
+
+    @page {
+        size: A4 portrait;
+        margin: 10mm;
+    }
+
+    html,
+    body {
+        margin: 0 !important;
+        padding: 0 !important;
+        background: white !important;
+    }
+
+    body {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+
+
+    /* ---------------------------------------------------------
+       OCULTAR TODA LA APLICACIÓN
+    --------------------------------------------------------- */
+
+    body * {
+        visibility: hidden;
+    }
+
+
+    /* ---------------------------------------------------------
+       MOSTRAR ÚNICAMENTE PRINT PLANNING
+    --------------------------------------------------------- */
+
+    .print-planning,
+    .print-planning * {
+        visibility: visible;
+    }
+
+
+    .print-planning {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+    }
+
+
+    /* ---------------------------------------------------------
+       CADA SECCIÓN = UNA PÁGINA
+    --------------------------------------------------------- */
+
+    .print-page {
+        width: 100%;
+        min-height: 277mm;
+
+        box-sizing: border-box;
+
+        position: relative;
+
+        page-break-after: always;
+        break-after: page;
+
+        overflow: hidden;
+    }
+
+
+    .print-page:last-child {
+        page-break-after: auto;
+        break-after: auto;
+    }
+
+
+    /* ---------------------------------------------------------
+       EVITAR CORTES INTERNOS
+    --------------------------------------------------------- */
+
+    .print-header,
+    .print-page-title,
+    .print-table-section,
+    .print-section-title,
+    .print-table,
+    .print-footer {
+        break-inside: avoid;
+        page-break-inside: avoid;
+    }
+
+
+    table {
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+    }
+
+
+    tr {
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+    }
+
+
+    /* ---------------------------------------------------------
+       ENCABEZADO
+    --------------------------------------------------------- */
+
+    .print-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+
+        width: 100%;
+
+        padding-bottom: 6mm;
+        margin-bottom: 7mm;
+
+        border-bottom: 1px solid #111;
+    }
+
+
+    .print-brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+
+    .print-nike {
+        font-size: 24px;
+        font-weight: 900;
+        letter-spacing: -1px;
+    }
+
+
+    .print-brand-divider {
+        width: 1px;
+        height: 30px;
+        background: #999;
+    }
+
+
+    .print-brand strong,
+    .print-brand span {
+        display: block;
+    }
+
+
+    .print-brand strong {
+        font-size: 12px;
+        letter-spacing: 1px;
+    }
+
+
+    .print-brand span {
+        margin-top: 2px;
+        font-size: 9px;
+        color: #555;
+        text-transform: uppercase;
+    }
+
+
+    .print-document-info {
+        text-align: right;
+    }
+
+
+    .print-document-info span,
+    .print-document-info strong,
+    .print-document-info small {
+        display: block;
+    }
+
+
+    .print-document-info span {
+        font-size: 8px;
+        letter-spacing: 1.5px;
+        color: #666;
+    }
+
+
+    .print-document-info strong {
+        margin-top: 3px;
+        font-size: 11px;
+    }
+
+
+    .print-document-info small {
+        margin-top: 4px;
+        font-size: 8px;
+        color: #777;
+    }
+
+
+    /* ---------------------------------------------------------
+       TÍTULO
+    --------------------------------------------------------- */
+
+    .print-page-title {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+
+        margin-bottom: 7mm;
+    }
+
+
+    .print-title-icon {
+        width: 34px;
+        height: 34px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        border: 1px solid #222;
+        border-radius: 6px;
+    }
+
+
+    .print-page-title h1 {
+        margin: 0;
+
+        font-size: 20px;
+        line-height: 1.1;
+    }
+
+
+    .print-page-title p {
+        margin: 3px 0 0;
+
+        font-size: 9px;
+        color: #666;
+    }
+
+
+    /* ---------------------------------------------------------
+       SECCIONES
+    --------------------------------------------------------- */
+
+    .print-table-section {
+        margin-bottom: 7mm;
+    }
+
+
+    .print-section-title {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+
+        margin-bottom: 3mm;
+    }
+
+
+    .print-section-icon {
+        width: 26px;
+        height: 26px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        border: 1px solid #bbb;
+        border-radius: 5px;
+    }
+
+
+    .print-section-title strong,
+    .print-section-title span {
+        display: block;
+    }
+
+
+    .print-section-title strong {
+        font-size: 11px;
+    }
+
+
+    .print-section-title span {
+        margin-top: 1px;
+        font-size: 8px;
+        color: #666;
+    }
+
+
+    /* ---------------------------------------------------------
+       TABLAS
+    --------------------------------------------------------- */
+
+    .print-table {
+        width: 100%;
+
+        border-collapse: collapse;
+
+        font-size: 9px;
+    }
+
+
+    .print-table th {
+        padding: 6px 5px;
+
+        text-align: left;
+
+        border: 1px solid #222;
+
+        background: #f2f2f2;
+
+        font-size: 8px;
+        font-weight: 700;
+
+        text-transform: uppercase;
+    }
+
+
+    .print-table td {
+        padding: 6px 5px;
+
+        border: 1px solid #bbb;
+
+        vertical-align: middle;
+    }
+
+
+    .print-table .day-column {
+        width: 18%;
+    }
+
+
+    .print-table .schedule-column {
+        width: 20%;
+    }
+
+
+    .print-table .status-column {
+        width: 15%;
+    }
+
+
+    .day-cell {
+        font-weight: 700;
+    }
+
+
+    /* ---------------------------------------------------------
+       PERSONAS
+    --------------------------------------------------------- */
+
+    .print-person-name {
+        font-weight: 600;
+    }
+
+
+    .print-time {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+
+        white-space: nowrap;
+    }
+
+
+    /* ---------------------------------------------------------
+       ESTADOS
+    --------------------------------------------------------- */
+
+    .print-status {
+        display: inline-block;
+
+        padding: 3px 6px;
+
+        border-radius: 4px;
+
+        font-size: 7px;
+        font-weight: 700;
+        text-transform: uppercase;
+    }
+
+
+    .print-status.assigned {
+        border: 1px solid #222;
+    }
+
+
+    .print-status.empty {
+        border: 1px solid #aaa;
+        color: #777;
+    }
+
+
+    /* ---------------------------------------------------------
+       ALMUERZOS
+    --------------------------------------------------------- */
+
+    .print-table-lunch th {
+        text-align: center;
+    }
+
+
+    .print-table-lunch th span,
+    .print-table-lunch th small {
+        display: block;
+    }
+
+
+    .print-table-lunch th span {
+        font-size: 9px;
+    }
+
+
+    .print-table-lunch th small {
+        margin-top: 2px;
+        font-size: 7px;
+        font-weight: 400;
+    }
+
+
+    .lunch-print-cell {
+        vertical-align: top !important;
+    }
+
+
+    .print-lunch-person {
+        padding: 3px 0;
+
+        border-bottom: 1px solid #ddd;
+    }
+
+
+    .print-lunch-person:last-child {
+        border-bottom: none;
+    }
+
+
+    .print-lunch-person strong,
+    .print-lunch-person small {
+        display: block;
+    }
+
+
+    .print-lunch-person strong {
+        font-size: 8px;
+    }
+
+
+    .print-lunch-person small {
+        margin-top: 1px;
+        font-size: 7px;
+        color: #666;
+    }
+
+
+    .print-empty {
+        color: #999;
+    }
+
+
+    /* ---------------------------------------------------------
+       ZONAS
+    --------------------------------------------------------- */
+
+    .print-table-zones th {
+        text-align: center;
+    }
+
+
+    .print-table-zones th span,
+    .print-table-zones th small {
+        display: block;
+    }
+
+
+    .print-table-zones th span {
+        font-size: 8px;
+    }
+
+
+    .print-table-zones th small {
+        margin-top: 2px;
+
+        font-size: 6.5px;
+        line-height: 1.2;
+
+        font-weight: 400;
+    }
+
+
+    .zone-print-cell {
+        vertical-align: top !important;
+    }
+
+
+    .print-zone-person {
+        padding: 3px 0;
+
+        border-bottom: 1px solid #ddd;
+    }
+
+
+    .print-zone-person:last-child {
+        border-bottom: none;
+    }
+
+
+    .print-zone-person strong,
+    .print-zone-person small {
+        display: block;
+    }
+
+
+    .print-zone-person strong {
+        font-size: 8px;
+    }
+
+
+    .print-zone-person small {
+        display: flex;
+        align-items: center;
+        gap: 2px;
+
+        margin-top: 2px;
+
+        font-size: 7px;
+        color: #666;
+    }
+
+
+    /* ---------------------------------------------------------
+       FOOTER
+    --------------------------------------------------------- */
+
+    .print-footer {
+        position: absolute;
+
+        left: 0;
+        right: 0;
+        bottom: 0;
+
+        display: flex;
+        justify-content: space-between;
+
+        padding-top: 4mm;
+
+        border-top: 1px solid #aaa;
+
+        font-size: 7px;
+        color: #666;
+    }
+
+
+    /* ---------------------------------------------------------
+       OCULTAR ELEMENTOS INTERACTIVOS
+    --------------------------------------------------------- */
+
+    button,
+    input,
+    select,
+    textarea,
+    .no-print,
+    .print-button,
+    nav,
+    aside {
+        display: none !important;
+    }
+
+}
+
+@media print {
+
+    body * {
+        visibility: hidden;
+    }
+
+    .print-planning,
+    .print-planning * {
+        visibility: visible;
+    }
+
+    .print-planning {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        background: white;
+    }
+
+}
+
+/* =========================================================
+   IMPRESIÓN - NIKE STAFF PLANNER
+========================================================= */
+
+.print-planning {
+    display: none;
+}
+
+
+/* =========================================================
+   BOTÓN DE IMPRESIÓN
+========================================================= */
+
+.print-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    margin-top: 24px;
+    padding: 12px 20px;
+
+    border: none;
+    border-radius: 10px;
+
+    background: #111;
+    color: #fff;
+
+    font-size: 14px;
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+.print-button:hover {
+    opacity: 0.85;
+}
+
+
+/* =========================================================
+   CONFIGURACIÓN DE IMPRESIÓN
+========================================================= */
+
+@media print {
+
+    /* -----------------------------------------
+       OCULTAR TODA LA INTERFAZ NORMAL
+    ----------------------------------------- */
+
+    body * {
+        visibility: hidden;
+    }
+
+
+    /* -----------------------------------------
+       MOSTRAR SOLAMENTE LA PLANIFICACIÓN
+    ----------------------------------------- */
+
+    .print-planning,
+    .print-planning * {
+        visibility: visible;
+    }
+
+
+    /* -----------------------------------------
+       POSICIONAR LA PLANIFICACIÓN
+    ----------------------------------------- */
+
+    .print-planning {
+        display: block !important;
+
+        position: absolute;
+        left: 0;
+        top: 0;
+
+        width: 100%;
+        margin: 0;
+        padding: 0;
+    }
+
+
+    /* -----------------------------------------
+       OCULTAR BOTÓN
+    ----------------------------------------- */
+
+    .print-button {
+        display: none !important;
+    }
+
+
+    /* -----------------------------------------
+       CONFIGURACIÓN GENERAL
+    ----------------------------------------- */
+
+    @page {
+        size: A4 portrait;
+        margin: 10mm;
+    }
+
+
+    html,
+    body {
+        margin: 0 !important;
+        padding: 0 !important;
+
+        width: 100%;
+        background: #fff !important;
+    }
+
+
+    /* -----------------------------------------
+       CADA SECTION ES UNA PÁGINA
+    ----------------------------------------- */
+
+    .print-page {
+        display: block;
+
+        width: 100%;
+        min-height: 277mm;
+
+        box-sizing: border-box;
+
+        page-break-after: always;
+        break-after: page;
+
+        background: #fff;
+    }
+
+
+    .print-page:last-child {
+        page-break-after: auto;
+        break-after: auto;
+    }
+
+
+    /* -----------------------------------------
+       EVITAR CORTES EN ELEMENTOS
+    ----------------------------------------- */
+
+    .print-header,
+    .print-page-title,
+    .print-table-section,
+    .print-table,
+    .print-footer {
+        break-inside: avoid;
+        page-break-inside: avoid;
+    }
+
+
+    .print-table tr {
+        break-inside: avoid;
+        page-break-inside: avoid;
+    }
+
+
+    /* -----------------------------------------
+       TABLAS
+    ----------------------------------------- */
+
+    .print-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+
+    .print-table th,
+    .print-table td {
+        border: 1px solid #ccc;
+        padding: 7px;
+        font-size: 11px;
+        vertical-align: middle;
+    }
+
+
+    .print-table th {
+        font-weight: 700;
+    }
+
+
+    /* -----------------------------------------
+       ICONOS
+    ----------------------------------------- */
+
+    .print-planning svg {
+        display: inline-block;
+    }
+
+
+    /* -----------------------------------------
+       PIE DE PÁGINA
+    ----------------------------------------- */
+
+    .print-footer {
+        display: flex;
+        justify-content: space-between;
+
+        margin-top: 15px;
+
+        font-size: 9px;
+    }
+
+
+    /* -----------------------------------------
+       COLORES
+    ----------------------------------------- */
+
+    .print-status.assigned {
+        font-weight: 700;
+    }
+
+
+    .print-status.empty {
+        font-weight: 400;
+    }
+
+
+    .print-empty {
+        opacity: 0.6;
+    }
+
+
+    /* -----------------------------------------
+       ALMUERZOS
+    ----------------------------------------- */
+
+    .print-lunch-person,
+    .print-zone-person {
+        display: flex;
+        flex-direction: column;
+
+        margin-bottom: 3px;
+    }
+
+
+    .print-lunch-person:last-child,
+    .print-zone-person:last-child {
+        margin-bottom: 0;
+    }
+
+
+    .print-lunch-person strong,
+    .print-zone-person strong {
+        font-size: 9px;
+    }
+
+
+    .print-lunch-person small,
+    .print-zone-person small {
+        font-size: 8px;
+    }
+
+
+    /* -----------------------------------------
+       ENCABEZADO
+    ----------------------------------------- */
+
+    .print-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+
+        margin-bottom: 15px;
+
+        padding-bottom: 10px;
+
+        border-bottom: 2px solid #111;
+    }
+
+
+    .print-brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+
+    .print-nike {
+        font-size: 24px;
+        font-weight: 900;
+        letter-spacing: -1px;
+    }
+
+
+    .print-brand-divider {
+        width: 1px;
+        height: 35px;
+        background: #999;
+    }
+
+
+    .print-brand strong,
+    .print-brand span {
+        display: block;
+    }
+
+
+    .print-brand strong {
+        font-size: 12px;
+    }
+
+
+    .print-brand span {
+        font-size: 9px;
+        margin-top: 2px;
+    }
+
+
+    .print-document-info {
+        text-align: right;
+    }
+
+
+    .print-document-info span,
+    .print-document-info strong,
+    .print-document-info small {
+        display: block;
+    }
+
+
+    .print-document-info span {
+        font-size: 8px;
+    }
+
+
+    .print-document-info strong {
+        font-size: 11px;
+        margin-top: 3px;
+    }
+
+
+    .print-document-info small {
+        font-size: 8px;
+        margin-top: 4px;
+    }
+
+
+    /* -----------------------------------------
+       TÍTULOS
+    ----------------------------------------- */
+
+    .print-page-title {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+
+        margin-bottom: 15px;
+    }
+
+
+    .print-page-title h1 {
+        margin: 0;
+
+        font-size: 20px;
+        font-weight: 800;
+    }
+
+
+    .print-page-title p {
+        margin: 3px 0 0;
+
+        font-size: 9px;
+    }
+
+
+    .print-title-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        width: 34px;
+        height: 34px;
+
+        border: 1px solid #ccc;
+        border-radius: 8px;
+    }
+
+
+    /* -----------------------------------------
+       SECCIONES
+    ----------------------------------------- */
+
+    .print-table-section {
+        margin-bottom: 14px;
+    }
+
+
+    .print-section-title {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+
+        margin-bottom: 6px;
+    }
+
+
+    .print-section-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+
+    .print-section-title strong,
+    .print-section-title span {
+        display: block;
+    }
+
+
+    .print-section-title strong {
+        font-size: 11px;
+    }
+
+
+    .print-section-title span {
+        font-size: 8px;
+    }
+
+
+    /* -----------------------------------------
+       ANCHOS DE COLUMNAS
+    ----------------------------------------- */
+
+    .day-column {
+        width: 18%;
+    }
+
+
+    .schedule-column {
+        width: 20%;
+    }
+
+
+    .status-column {
+        width: 16%;
+    }
+
+
+    /* -----------------------------------------
+       CELDAS
+    ----------------------------------------- */
+
+    .day-cell {
+        font-weight: 700;
+    }
+
+
+    .print-person-name {
+        font-weight: 600;
+    }
+
+
+    .print-time {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+
+        font-size: 10px;
+    }
+
+
+    .print-status {
+        font-size: 9px;
+    }
+
+
+    /* -----------------------------------------
+       ZONAS
+    ----------------------------------------- */
+
+    .print-table-zones th,
+    .print-table-zones td {
+        font-size: 9px;
+        padding: 5px;
+    }
+
+
+    .print-table-zones th span,
+    .print-table-zones th small {
+        display: block;
+    }
+
+
+    .print-table-zones th span {
+        font-size: 9px;
+        font-weight: 700;
+    }
+
+
+    .print-table-zones th small {
+        margin-top: 2px;
+        font-size: 7px;
+        font-weight: 400;
+    }
+
+
+    /* -----------------------------------------
+       ALMUERZOS
+    ----------------------------------------- */
+
+    .print-table-lunch th,
+    .print-table-lunch td {
+        text-align: center;
+    }
+
+
+    .print-table-lunch th span,
+    .print-table-lunch th small {
+        display: block;
+    }
+
+
+    .print-table-lunch th span {
+        font-weight: 700;
+    }
+
+
+    .print-table-lunch th small {
+        font-size: 7px;
+        font-weight: 400;
+    }
+
+}

@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react'
 import {
     CalendarDays,
     Sparkles,
-    RefreshCw,
     CheckCircle2,
     Utensils,
     ClipboardList,
@@ -29,6 +28,7 @@ import {
 import ActivityPreview from './ActivityPreview'
 import ZonePreview from './ZonePreview'
 
+
 const DAYS = [
     { id: 'monday', name: 'Lunes' },
     { id: 'tuesday', name: 'Martes' },
@@ -38,6 +38,7 @@ const DAYS = [
     { id: 'saturday', name: 'Sábado' },
     { id: 'sunday', name: 'Domingo' },
 ]
+
 
 function PlanningPreview({
     employees,
@@ -49,20 +50,31 @@ function PlanningPreview({
        ESTADO
     ========================================= */
 
-    const [planningGenerated, setPlanningGenerated] =
-        useState(false)
+    const [
+        planningGenerated,
+        setPlanningGenerated
+    ] = useState(false)
 
-    const [a15Assignments, setA15Assignments] =
-        useState([])
+    const [
+        a15Assignments,
+        setA15Assignments
+    ] = useState([])
 
-    const [cleaningAssignments, setCleaningAssignments] =
-        useState([])
+    const [
+        cleaningAssignments,
+        setCleaningAssignments
+    ] = useState([])
 
-    const [zoneAssignments, setZoneAssignments] =
-        useState({})
+    const [
+        zoneAssignments,
+        setZoneAssignments
+    ] = useState({})
 
-    const [lunchAssignments, setLunchAssignments] =
-        useState({})
+    const [
+        lunchAssignments,
+        setLunchAssignments
+    ] = useState({})
+
 
     /* =========================================
        LIMPIAR PLANIFICACIÓN
@@ -72,12 +84,17 @@ function PlanningPreview({
     useEffect(() => {
 
         setPlanningGenerated(false)
+
         setA15Assignments([])
+
         setCleaningAssignments([])
+
         setZoneAssignments({})
+
         setLunchAssignments({})
 
     }, [employees])
+
 
     /* =========================================
        GENERAR PLANIFICACIÓN COMPLETA
@@ -89,12 +106,14 @@ function PlanningPreview({
             !employees ||
             employees.length === 0
         ) {
+
             console.warn(
                 'No existen empleados para generar la planificación.'
             )
 
             return
         }
+
 
         console.log(
             '================================='
@@ -108,6 +127,7 @@ function PlanningPreview({
             '================================='
         )
 
+
         /* =====================================
            A15
         ===================================== */
@@ -116,6 +136,7 @@ function PlanningPreview({
             generateWeeklyA15Assignments(
                 employees
             )
+
 
         /* =====================================
            LIMPIEZA
@@ -127,6 +148,7 @@ function PlanningPreview({
                 a15Result.assignments
             )
 
+
         /* =====================================
            ZONAS
         ===================================== */
@@ -136,11 +158,13 @@ function PlanningPreview({
                 employees
             )
 
+
         /* =====================================
            ALMUERZOS
         ===================================== */
 
         const weeklyLunchAssignments = {}
+
 
         DAYS.forEach((day) => {
 
@@ -156,36 +180,75 @@ function PlanningPreview({
 
         })
 
+
         /* =====================================
-           GUARDAR RESULTADOS
+           RESULTADOS FINALES
+        ===================================== */
+
+        const finalA15Assignments =
+            a15Result?.assignments || []
+
+        const finalCleaningAssignments =
+            cleaningResult?.assignments || []
+
+        const finalZoneAssignments =
+            zoneResult?.byDay || {}
+
+        const finalLunchAssignments =
+            weeklyLunchAssignments
+
+
+        /* =====================================
+           GUARDAR EN ESTADO LOCAL
         ===================================== */
 
         setA15Assignments(
-            a15Result.assignments
+            finalA15Assignments
         )
 
         setCleaningAssignments(
-            cleaningResult.assignments
+            finalCleaningAssignments
         )
 
         setZoneAssignments(
-            zoneResult.byDay
+            finalZoneAssignments
         )
 
         setLunchAssignments(
-            weeklyLunchAssignments
+            finalLunchAssignments
         )
 
         setPlanningGenerated(true)
 
-        /*
-         * Avisamos a App.jsx que la planificación
-         * terminó correctamente.
-         */
+
+        /* =====================================
+           ENVIAR RESULTADOS A APP.JSX
+           
+           IMPORTANTE:
+           App.jsx necesita estos resultados
+           para generar el PDF.
+        ===================================== */
 
         if (onPlanningGenerated) {
-            onPlanningGenerated()
+
+            onPlanningGenerated({
+
+                a15Assignments:
+                    finalA15Assignments,
+
+                cleaningAssignments:
+                    finalCleaningAssignments,
+
+                lunchAssignments:
+                    finalLunchAssignments,
+
+                zoneAssignments:
+                    finalZoneAssignments,
+
+            })
+
         }
+
 
         /* =====================================
            CONSOLA
@@ -197,25 +260,26 @@ function PlanningPreview({
 
         console.log(
             'A15:',
-            a15Result
+            finalA15Assignments
         )
 
         console.log(
             'LIMPIEZA:',
-            cleaningResult
+            finalCleaningAssignments
         )
 
         console.log(
             'ZONAS:',
-            zoneResult
+            finalZoneAssignments
         )
 
         console.log(
             'ALMUERZOS:',
-            weeklyLunchAssignments
+            finalLunchAssignments
         )
 
     }
+
 
     /* =========================================
        ESCUCHAR BOTÓN SUPERIOR
@@ -233,6 +297,7 @@ function PlanningPreview({
 
     }, [generateTrigger])
 
+
     /* =========================================
        VALIDACIÓN
     ========================================= */
@@ -241,8 +306,11 @@ function PlanningPreview({
         !employees ||
         employees.length === 0
     ) {
+
         return null
+
     }
+
 
     /* =========================================
        TOTALES
@@ -264,6 +332,7 @@ function PlanningPreview({
             0
         )
 
+
     const totalZoneAssignments =
         Object.values(
             zoneAssignments
@@ -279,6 +348,11 @@ function PlanningPreview({
                 ),
             0
         )
+
+
+    /* =========================================
+       RENDER
+    ========================================= */
 
     return (
 
@@ -322,6 +396,7 @@ function PlanningPreview({
 
             </div>
 
+
             {/* ================================= */}
             {/* ESTADO INICIAL */}
             {/* ================================= */}
@@ -356,6 +431,7 @@ function PlanningPreview({
                 </div>
 
             )}
+
 
             {/* ================================= */}
             {/* RESULTADOS */}
@@ -393,6 +469,7 @@ function PlanningPreview({
 
                         </div>
 
+
                         <div className="planning-result-card">
 
                             <Sparkles size={19} />
@@ -415,6 +492,7 @@ function PlanningPreview({
 
                         </div>
 
+
                         <div className="planning-result-card">
 
                             <ClipboardList size={19} />
@@ -436,6 +514,7 @@ function PlanningPreview({
                             <CheckCircle2 size={18} />
 
                         </div>
+
 
                         <div className="planning-result-card">
 
@@ -460,6 +539,7 @@ function PlanningPreview({
                         </div>
 
                     </div>
+
 
                     {/* ================================= */}
                     {/* ALMUERZOS */}
@@ -497,6 +577,7 @@ function PlanningPreview({
 
                         </div>
 
+
                         <div className="weekly-lunch-container">
 
                             {DAYS.map((day) => {
@@ -506,35 +587,44 @@ function PlanningPreview({
                                         day.id
                                     ]
 
+
                                 if (!result) {
                                     return null
                                 }
 
+
                                 const assignments =
                                     result.assignments || []
 
+
                                 const times = [
+
                                     {
                                         shift: 1,
                                         start: '12:30',
                                         end: '13:30',
                                     },
+
                                     {
                                         shift: 2,
                                         start: '13:30',
                                         end: '14:30',
                                     },
+
                                     {
                                         shift: 3,
                                         start: '14:30',
                                         end: '15:30',
                                     },
+
                                     {
                                         shift: 4,
                                         start: '15:30',
                                         end: '16:30',
                                     },
+
                                 ]
+
 
                                 return (
 
@@ -567,6 +657,7 @@ function PlanningPreview({
 
                                         </div>
 
+
                                         <div className="lunch-time-grid">
 
                                             {times.map(
@@ -580,6 +671,7 @@ function PlanningPreview({
                                                                 assignment.lunchShift ===
                                                                 time.shift
                                                         )
+
 
                                                     return (
 
@@ -626,6 +718,7 @@ function PlanningPreview({
 
                                                                 </div>
 
+
                                                                 <span className="lunch-people-count">
 
                                                                     {
@@ -636,13 +729,16 @@ function PlanningPreview({
 
                                                             </div>
 
+
                                                             <div className="lunch-people-list">
 
                                                                 {people.length ===
-                                                                0 ? (
+                                                                    0 ? (
 
                                                                     <div className="lunch-no-assignment">
+
                                                                         Sin asignación
+
                                                                     </div>
 
                                                                 ) : (
@@ -709,6 +805,7 @@ function PlanningPreview({
 
                     </section>
 
+
                     {/* ================================= */}
                     {/* ACTIVIDADES */}
                     {/* ================================= */}
@@ -745,16 +842,19 @@ function PlanningPreview({
 
                         </div>
 
+
                         <ActivityPreview
                             a15Assignments={
                                 a15Assignments
                             }
+
                             cleaningAssignments={
                                 cleaningAssignments
                             }
                         />
 
                     </section>
+
 
                     {/* ================================= */}
                     {/* ZONAS */}
@@ -792,6 +892,7 @@ function PlanningPreview({
 
                         </div>
 
+
                         <ZonePreview
                             zoneAssignments={
                                 zoneAssignments
@@ -807,6 +908,8 @@ function PlanningPreview({
         </section>
 
     )
+
 }
+
 
 export default PlanningPreview

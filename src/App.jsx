@@ -18,6 +18,10 @@ import AvailabilityPreview from './components/AvailabilityPreview'
 import PlanningPreview from './components/PlanningPreview'
 import SettingsView from './components/SettingsView'
 
+import {
+    openPlanningPDF,
+} from './services/planningPdf'
+
 import './App.css'
 
 
@@ -98,13 +102,37 @@ function App() {
 
 
     /* =========================================
-       ESTADO GLOBAL DE PLANIFICACIÓN
+       ESTADO DE PLANIFICACIÓN
     ========================================= */
 
     const [
         planningGenerated,
         setPlanningGenerated
     ] = useState(false)
+
+
+    /* =========================================
+       RESULTADOS DE PLANIFICACIÓN
+       
+       PlanningPreview genera los datos.
+       App.jsx los conserva para generar
+       posteriormente el PDF.
+    ========================================= */
+
+    const [
+        planningResults,
+        setPlanningResults
+    ] = useState({
+
+        a15Assignments: [],
+
+        cleaningAssignments: [],
+
+        lunchAssignments: {},
+
+        zoneAssignments: {},
+
+    })
 
 
     /* =========================================
@@ -123,14 +151,125 @@ function App() {
 
     const handleExcelLoaded = (data) => {
 
-        setScheduleData(data)
-
-        setPlanningGenerated(false)
-
         console.log(
             'HORARIO cargado correctamente:',
             data
         )
+
+
+        /*
+         * Guardar nuevo horario
+         */
+
+        setScheduleData(
+            data
+        )
+
+
+        /*
+         * La planificación anterior
+         * deja de ser válida.
+         */
+
+        setPlanningGenerated(
+            false
+        )
+
+
+        /*
+         * Limpiar resultados anteriores
+         * utilizados por el PDF.
+         */
+
+        setPlanningResults({
+
+            a15Assignments: [],
+
+            cleaningAssignments: [],
+
+            lunchAssignments: {},
+
+            zoneAssignments: {},
+
+        })
+
+    }
+
+
+    /* =========================================
+       RECIBIR RESULTADOS DE PLANNING PREVIEW
+       
+       PlanningPreview llama esta función
+       cuando termina de generar toda
+       la planificación.
+    ========================================= */
+
+    const handlePlanningGenerated = (results) => {
+
+        console.log(
+            '================================='
+        )
+
+        console.log(
+            'RESULTADOS RECIBIDOS EN APP'
+        )
+
+        console.log(
+            '================================='
+        )
+
+
+        console.log(
+            'A15:',
+            results?.a15Assignments
+        )
+
+        console.log(
+            'LIMPIEZA:',
+            results?.cleaningAssignments
+        )
+
+        console.log(
+            'ALMUERZOS:',
+            results?.lunchAssignments
+        )
+
+        console.log(
+            'ZONAS:',
+            results?.zoneAssignments
+        )
+
+
+        /*
+         * Guardar todos los resultados
+         * en un único objeto.
+         */
+
+        setPlanningResults({
+
+            a15Assignments:
+                results?.a15Assignments || [],
+
+            cleaningAssignments:
+                results?.cleaningAssignments || [],
+
+            lunchAssignments:
+                results?.lunchAssignments || {},
+
+            zoneAssignments:
+                results?.zoneAssignments || {},
+
+        })
+
+
+        /*
+         * Marcar planificación como generada.
+         */
+
+        setPlanningGenerated(
+            true
+        )
+
     }
 
 
@@ -141,18 +280,44 @@ function App() {
     const handleGeneratePlanning = () => {
 
         if (!scheduleData) {
+
+            console.warn(
+                'No existe un horario cargado.'
+            )
+
             return
+
         }
+
+
+        console.log(
+            '================================='
+        )
 
         console.log(
             'GENERAR PLANIFICACIÓN GLOBAL'
         )
 
-        setGenerateTrigger(
-            previous => previous + 1
+        console.log(
+            '================================='
         )
 
-        setPlanningGenerated(true)
+
+        /*
+         * Avisar a PlanningPreview
+         * que debe generar una nueva
+         * planificación.
+         */
+
+        setGenerateTrigger(
+            previous =>
+                previous + 1
+        )
+
+
+        /*
+         * Desplazarnos hacia los resultados.
+         */
 
         setTimeout(() => {
 
@@ -161,11 +326,15 @@ function App() {
                     'section-planning-results'
                 )
 
+
             if (planningElement) {
 
                 planningElement.scrollIntoView({
+
                     behavior: 'smooth',
+
                     block: 'start',
+
                 })
 
             }
@@ -176,20 +345,58 @@ function App() {
 
 
     /* =========================================
-       IMPRIMIR
+       IMPRIMIR PLANIFICACIÓN
     ========================================= */
 
-    const handlePrintCronograma = () => {
+    const handlePrintPlanning = () => {
 
         if (!planningGenerated) {
+
+            console.warn(
+                'No existe una planificación generada.'
+            )
+
             return
+
         }
 
+
         console.log(
-            'IMPRIMIR CRONOGRAMA'
+            '================================='
         )
 
-        window.print()
+        console.log(
+            'GENERANDO PDF DE PLANIFICACIÓN'
+        )
+
+        console.log(
+            '================================='
+        )
+
+
+        console.log(
+            'RESULTADOS PARA PDF:',
+            planningResults
+        )
+
+
+        /*
+         * Generar PDF directamente.
+         *
+         * NO utiliza:
+         *
+         * window.print()
+         *
+         * ProfesionalPrint.jsx
+         *
+         * controlador de impresión
+         * del navegador.
+         */
+
+        openPlanningPDF(
+            planningResults
+        )
+
     }
 
 
@@ -199,7 +406,9 @@ function App() {
 
     const handleNavigation = (section) => {
 
-        setActiveSection(section)
+        setActiveSection(
+            section
+        )
 
 
         /* =====================================
@@ -209,11 +418,15 @@ function App() {
         if (section === 'settings') {
 
             window.scrollTo({
+
                 top: 0,
+
                 behavior: 'smooth',
+
             })
 
             return
+
         }
 
 
@@ -222,6 +435,7 @@ function App() {
         ===================================== */
 
         let sectionId = null
+
 
         switch (section) {
 
@@ -268,11 +482,14 @@ function App() {
             default:
 
                 break
+
         }
 
 
         if (!sectionId) {
+
             return
+
         }
 
 
@@ -285,8 +502,11 @@ function App() {
         if (sectionElement) {
 
             sectionElement.scrollIntoView({
+
                 behavior: 'smooth',
+
                 block: 'start',
+
             })
 
         }
@@ -295,7 +515,7 @@ function App() {
 
 
     /* =========================================
-       ESTADOS
+       ESTADOS DERIVADOS
     ========================================= */
 
     const hasSchedule =
@@ -340,6 +560,7 @@ function App() {
                         NIKE
                     </div>
 
+
                     {sidebarOpen && (
 
                         <span className="planner-title">
@@ -375,12 +596,16 @@ function App() {
                         }
                     >
 
-                        <CalendarDays size={20} />
+                        <CalendarDays
+                            size={20}
+                        />
 
                         {sidebarOpen && (
+
                             <span>
                                 Planificación
                             </span>
+
                         )}
 
                     </button>
@@ -401,12 +626,16 @@ function App() {
                         }
                     >
 
-                        <Users size={20} />
+                        <Users
+                            size={20}
+                        />
 
                         {sidebarOpen && (
+
                             <span>
                                 Personal
                             </span>
+
                         )}
 
                     </button>
@@ -427,12 +656,16 @@ function App() {
                         }
                     >
 
-                        <Utensils size={20} />
+                        <Utensils
+                            size={20}
+                        />
 
                         {sidebarOpen && (
+
                             <span>
                                 Almuerzos
                             </span>
+
                         )}
 
                     </button>
@@ -453,12 +686,16 @@ function App() {
                         }
                     >
 
-                        <Sparkles size={20} />
+                        <Sparkles
+                            size={20}
+                        />
 
                         {sidebarOpen && (
+
                             <span>
                                 A15 / Limpieza
                             </span>
+
                         )}
 
                     </button>
@@ -479,12 +716,16 @@ function App() {
                         }
                     >
 
-                        <ClipboardList size={20} />
+                        <ClipboardList
+                            size={20}
+                        />
 
                         {sidebarOpen && (
+
                             <span>
                                 Cronograma
                             </span>
+
                         )}
 
                     </button>
@@ -511,12 +752,16 @@ function App() {
                         }
                     >
 
-                        <Settings size={20} />
+                        <Settings
+                            size={20}
+                        />
 
                         {sidebarOpen && (
+
                             <span>
                                 Configuración
                             </span>
+
                         )}
 
                     </button>
@@ -529,12 +774,18 @@ function App() {
                         <div className="sidebar-app-info">
 
                             <div className="sidebar-app-name">
+
                                 Nike Staff Planner
+
                             </div>
 
+
                             <div className="sidebar-app-version">
+
                                 Versión 1.0.0
+
                             </div>
+
 
                             <div className="sidebar-app-status">
 
@@ -578,11 +829,15 @@ function App() {
 
                         {sidebarOpen ? (
 
-                            <X size={22} />
+                            <X
+                                size={22}
+                            />
 
                         ) : (
 
-                            <Menu size={22} />
+                            <Menu
+                                size={22}
+                            />
 
                         )}
 
@@ -633,10 +888,6 @@ function App() {
 
                     ) : (
 
-                        /* =================================
-                           VISTA PRINCIPAL
-                        ================================= */
-
                         <>
 
 
@@ -652,17 +903,25 @@ function App() {
                                 <div className="welcome-info">
 
                                     <span className="eyebrow">
+
                                         PLANIFICACIÓN SEMANAL
+
                                     </span>
 
+
                                     <h2>
+
                                         Quicentro
+
                                     </h2>
 
+
                                     <p>
+
                                         Organiza las actividades
                                         del equipo de forma rápida
                                         y eficiente.
+
                                     </p>
 
                                 </div>
@@ -707,7 +966,9 @@ function App() {
                                         }
                                     >
 
-                                        <Sparkles size={19} />
+                                        <Sparkles
+                                            size={19}
+                                        />
 
                                         <span>
 
@@ -720,7 +981,9 @@ function App() {
                                     </button>
 
 
+                                    {/* ========================================= */}
                                     {/* IMPRIMIR */}
+                                    {/* ========================================= */}
 
                                     <button
                                         className={`planning-action-button print ${
@@ -729,7 +992,7 @@ function App() {
                                                 : ''
                                         }`}
                                         onClick={
-                                            handlePrintCronograma
+                                            handlePrintPlanning
                                         }
                                         disabled={
                                             !planningGenerated
@@ -737,14 +1000,18 @@ function App() {
                                         title={
                                             !planningGenerated
                                                 ? 'Primero genera la planificación'
-                                                : 'Imprimir cronograma'
+                                                : 'Generar PDF de la planificación'
                                         }
                                     >
 
-                                        <Printer size={19} />
+                                        <Printer
+                                            size={19}
+                                        />
 
                                         <span>
+
                                             Imprimir cronograma
+
                                         </span>
 
                                     </button>
@@ -766,7 +1033,11 @@ function App() {
                                 <div className="stat-card">
 
                                     <div className="stat-icon">
-                                        <Users size={22} />
+
+                                        <Users
+                                            size={22}
+                                        />
+
                                     </div>
 
                                     <div>
@@ -815,16 +1086,20 @@ function App() {
                                         <strong>
 
                                             {scheduleData
-                                                ? scheduleData.employees.reduce(
-                                                    (
-                                                        total,
-                                                        employee
-                                                    ) =>
-                                                        total +
-                                                        employee.weeklyHours,
-                                                    0
-                                                )
-                                                : 0}{' '}
+                                                ? scheduleData
+                                                    .employees
+                                                    .reduce(
+                                                        (
+                                                            total,
+                                                            employee
+                                                        ) =>
+                                                            total +
+                                                            employee.weeklyHours,
+                                                        0
+                                                    )
+                                                : 0}
+
+                                            {' '}
                                             h
 
                                         </strong>
@@ -843,7 +1118,11 @@ function App() {
                                 <div className="stat-card">
 
                                     <div className="stat-icon">
-                                        <Utensils size={22} />
+
+                                        <Utensils
+                                            size={22}
+                                        />
+
                                     </div>
 
                                     <div>
@@ -874,7 +1153,11 @@ function App() {
                                 <div className="stat-card">
 
                                     <div className="stat-icon">
-                                        <Sparkles size={22} />
+
+                                        <Sparkles
+                                            size={22}
+                                        />
+
                                     </div>
 
                                     <div>
@@ -1045,9 +1328,15 @@ function App() {
                                         employees={
                                             scheduleData.employees
                                         }
+
                                         generateTrigger={
                                             generateTrigger
                                         }
+
+                                        onPlanningGenerated={
+                                            handlePlanningGenerated
+                                        }
+
                                     />
 
                                 </section>
