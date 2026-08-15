@@ -1,9 +1,7 @@
 import {
     Sparkles,
-    Brush,
+    BrushCleaning,
     Clock3,
-    User,
-    CheckCircle2,
 } from 'lucide-react'
 
 const DAYS = [
@@ -21,98 +19,57 @@ function ActivityPreview({
     cleaningAssignments = [],
 }) {
 
-    const getAssignment = (
-        assignments,
-        day
-    ) => {
-        return (
-            assignments.find(
-                (assignment) =>
-                    assignment.day === day
-            ) || null
-        )
-    }
-
     return (
-        <section className="activity-preview">
+        <div className="activity-preview">
 
-            {/* ================================= */}
-            {/* ENCABEZADO */}
-            {/* ================================= */}
+            <div className="activity-summary">
 
-            <div className="planning-section-header">
+                <div className="activity-summary-card">
+                    <Sparkles size={18} />
 
-                <div>
-                    <span className="eyebrow">
-                        ACTIVIDADES
-                    </span>
+                    <div>
+                        <strong>
+                            {a15Assignments.length}
+                        </strong>
 
-                    <h2>
-                        A15 y Limpieza
-                    </h2>
-
-                    <p>
-                        Distribución diaria de las
-                        actividades del equipo.
-                    </p>
+                        <span>
+                            A15
+                        </span>
+                    </div>
                 </div>
 
-                <div className="planning-header-stats">
+                <div className="activity-summary-card">
+                    <BrushCleaning size={18} />
 
-                    <div className="planning-mini-stat">
-                        <Sparkles size={18} />
+                    <div>
+                        <strong>
+                            {cleaningAssignments.length}
+                        </strong>
 
-                        <div>
-                            <strong>
-                                {
-                                    a15Assignments.length
-                                }
-                            </strong>
-
-                            <span>
-                                A15
-                            </span>
-                        </div>
+                        <span>
+                            Limpieza
+                        </span>
                     </div>
-
-                    <div className="planning-mini-stat">
-                        <Brush size={18} />
-
-                        <div>
-                            <strong>
-                                {
-                                    cleaningAssignments.length
-                                }
-                            </strong>
-
-                            <span>
-                                Limpieza
-                            </span>
-                        </div>
-                    </div>
-
                 </div>
 
             </div>
 
-            {/* ================================= */}
-            {/* TARJETAS POR DÍA */}
-            {/* ================================= */}
-
-            <div className="activity-days-grid">
+            <div className="activity-days">
 
                 {DAYS.map((day) => {
 
                     const a15 =
-                        getAssignment(
-                            a15Assignments,
-                            day.id
+                        a15Assignments.find(
+                            (assignment) =>
+                                assignment.day ===
+                                day.id
                         )
 
                     const cleaning =
-                        getAssignment(
-                            cleaningAssignments,
-                            day.id
+                        cleaningAssignments.find(
+                            (assignment) =>
+                                assignment.day ===
+                                day.id
                         )
 
                     return (
@@ -121,125 +78,103 @@ function ActivityPreview({
                             key={day.id}
                         >
 
-                            {/* DÍA */}
-
                             <div className="activity-day-header">
 
-                                <div>
-                                    <span>
-                                        DÍA
-                                    </span>
+                                <span>
+                                    DÍA
+                                </span>
 
-                                    <strong>
-                                        {day.name}
-                                    </strong>
-                                </div>
-
-                                <CheckCircle2
-                                    size={20}
-                                />
+                                <strong>
+                                    {day.name}
+                                </strong>
 
                             </div>
 
-                            {/* A15 */}
+                            <div className="activity-cards">
 
-                            <div className="activity-card">
+                                {/* A15 */}
 
-                                <div className="activity-card-icon a15-icon">
-                                    <Sparkles
-                                        size={19}
-                                    />
-                                </div>
+                                <div className="activity-card a15-card">
 
-                                <div className="activity-card-content">
+                                    <div className="activity-card-icon">
+                                        <Sparkles size={18} />
+                                    </div>
 
-                                    <span className="activity-label">
-                                        A15
-                                    </span>
+                                    <div className="activity-card-content">
 
-                                    {a15 ? (
-                                        <>
-                                            <strong>
-                                                {
-                                                    a15.employeeName
-                                                }
-                                            </strong>
-
-                                            <div className="activity-meta">
-
-                                                <Clock3
-                                                    size={13}
-                                                />
-
-                                                <span>
-                                                    {
-                                                        a15.start
-                                                    }
-                                                    {' — '}
-                                                    {
-                                                        a15.end
-                                                    }
-                                                </span>
-
-                                            </div>
-                                        </>
-                                    ) : (
-                                        <span className="activity-empty">
-                                            Sin asignación
+                                        <span className="activity-label">
+                                            A15
                                         </span>
-                                    )}
 
-                                </div>
+                                        <strong>
+                                            {
+                                                a15?.employeeName ||
+                                                'Sin asignación'
+                                            }
+                                        </strong>
 
-                            </div>
+                                        {a15 && (
+                                            <span className="activity-time">
 
-                            {/* LIMPIEZA */}
+                                                <Clock3 size={14} />
 
-                            <div className="activity-card">
-
-                                <div className="activity-card-icon cleaning-icon">
-                                    <Brush
-                                        size={19}
-                                    />
-                                </div>
-
-                                <div className="activity-card-content">
-
-                                    <span className="activity-label">
-                                        LIMPIEZA
-                                    </span>
-
-                                    {cleaning ? (
-                                        <>
-                                            <strong>
                                                 {
-                                                    cleaning.employeeName
+                                                    a15.start
                                                 }
-                                            </strong>
+                                                {' '}
+                                                —
+                                                {' '}
+                                                {
+                                                    a15.end
+                                                }
 
-                                            <div className="activity-meta">
+                                            </span>
+                                        )}
 
-                                                <Clock3
-                                                    size={13}
-                                                />
+                                    </div>
 
-                                                <span>
-                                                    {
-                                                        cleaning.start
-                                                    }
-                                                    {' — '}
-                                                    {
-                                                        cleaning.end
-                                                    }
-                                                </span>
+                                </div>
 
-                                            </div>
-                                        </>
-                                    ) : (
-                                        <span className="activity-empty">
-                                            Sin asignación
+                                {/* LIMPIEZA */}
+
+                                <div className="activity-card cleaning-card">
+
+                                    <div className="activity-card-icon">
+                                        <BrushCleaning size={18} />
+                                    </div>
+
+                                    <div className="activity-card-content">
+
+                                        <span className="activity-label">
+                                            LIMPIEZA
                                         </span>
-                                    )}
+
+                                        <strong>
+                                            {
+                                                cleaning?.employeeName ||
+                                                'Sin asignación'
+                                            }
+                                        </strong>
+
+                                        {cleaning && (
+                                            <span className="activity-time">
+
+                                                <Clock3 size={14} />
+
+                                                {
+                                                    cleaning.start
+                                                }
+                                                {' '}
+                                                —
+                                                {' '}
+                                                {
+                                                    cleaning.end
+                                                }
+
+                                            </span>
+                                        )}
+
+                                    </div>
 
                                 </div>
 
@@ -251,7 +186,7 @@ function ActivityPreview({
 
             </div>
 
-        </section>
+        </div>
     )
 }
 

@@ -1792,3 +1792,821 @@
     }
 
 }
+
+/* =========================================================
+   PLANIFICACIÓN UNIFICADA
+   ========================================================= */
+
+.planning-section {
+    margin-top: 28px;
+    padding: 24px;
+    background: #ffffff;
+    border: 1px solid #e8e8e8;
+    border-radius: 20px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04);
+}
+
+.planning-section-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 24px;
+}
+
+.planning-section-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.lunch-icon {
+    background: #fff4e5;
+}
+
+.activity-icon {
+    background: #f2efff;
+}
+
+.zone-icon {
+    background: #edf7f0;
+}
+
+.planning-section-header h3 {
+    margin: 3px 0 4px;
+    font-size: 22px;
+    line-height: 1.2;
+}
+
+.planning-section-header p {
+    margin: 0;
+    color: #777;
+    font-size: 14px;
+}
+
+/* =========================================================
+   ALMUERZOS
+   ========================================================= */
+
+.weekly-lunch-container {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.weekly-lunch-day {
+    border: 1px solid #e8e8e8;
+    border-radius: 16px;
+    overflow: hidden;
+    background: #fafafa;
+}
+
+.weekly-day-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 18px;
+    background: #f5f5f5;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.weekly-day-header div {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.weekly-day-header span {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: #888;
+}
+
+.weekly-day-header strong {
+    font-size: 18px;
+}
+
+.day-total-badge {
+    padding: 6px 10px;
+    border-radius: 999px;
+    background: #ffffff;
+    border: 1px solid #ddd;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.lunch-time-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+    padding: 14px;
+}
+
+.lunch-time-card {
+    min-width: 0;
+    background: #ffffff;
+    border: 1px solid #e6e6e6;
+    border-radius: 14px;
+    overflow: hidden;
+}
+
+.lunch-time-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 13px;
+    background: #fafafa;
+    border-bottom: 1px solid #eeeeee;
+}
+
+.lunch-time-main {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    min-width: 0;
+}
+
+.lunch-time-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 9px;
+    background: #fff1df;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.lunch-time-main div:last-child {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.lunch-time-main strong {
+    font-size: 15px;
+}
+
+.lunch-time-main span {
+    font-size: 11px;
+    color: #888;
+    margin-top: 2px;
+}
+
+.lunch-people-count {
+    min-width: 27px;
+    height: 27px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #111;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.lunch-people-list {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    padding: 10px;
+}
+
+.lunch-person-card {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 9px;
+    border: 1px solid #eeeeee;
+    border-radius: 10px;
+    background: #fff;
+}
+
+.lunch-person-number {
+    width: 25px;
+    height: 25px;
+    border-radius: 7px;
+    background: #f1f1f1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.lunch-person-card div:last-child {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.lunch-person-card strong {
+    font-size: 12px;
+    line-height: 1.3;
+    white-space: normal;
+    overflow-wrap: anywhere;
+}
+
+.lunch-person-card span {
+    display: block;
+    margin-top: 3px;
+    font-size: 10px;
+    color: #888;
+}
+
+.lunch-no-assignment {
+    padding: 18px 8px;
+    text-align: center;
+    font-size: 11px;
+    color: #999;
+    border: 1px dashed #ddd;
+    border-radius: 9px;
+}
+
+/* =========================================================
+   ACTIVIDADES
+   ========================================================= */
+
+.activity-preview {
+    width: 100%;
+}
+
+.activity-summary {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.activity-summary-card {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    padding: 13px 15px;
+    border: 1px solid #e8e8e8;
+    border-radius: 12px;
+    background: #fafafa;
+}
+
+.activity-summary-card div {
+    display: flex;
+    flex-direction: column;
+}
+
+.activity-summary-card strong {
+    font-size: 18px;
+}
+
+.activity-summary-card span {
+    font-size: 11px;
+    color: #888;
+}
+
+.activity-days {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.activity-day-card {
+    border: 1px solid #e7e7e7;
+    border-radius: 15px;
+    overflow: hidden;
+    background: #fafafa;
+}
+
+.activity-day-header {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 13px 16px;
+    background: #f5f5f5;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.activity-day-header span {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: #888;
+}
+
+.activity-day-header strong {
+    font-size: 16px;
+}
+
+.activity-cards {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    padding: 12px;
+}
+
+.activity-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+    padding: 14px;
+    background: #ffffff;
+    border: 1px solid #e7e7e7;
+    border-radius: 13px;
+}
+
+.activity-card-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.a15-card .activity-card-icon {
+    background: #f0ecff;
+}
+
+.cleaning-card .activity-card-icon {
+    background: #eaf7ef;
+}
+
+.activity-card-content {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.activity-label {
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    color: #888;
+    margin-bottom: 3px;
+}
+
+.activity-card-content strong {
+    font-size: 14px;
+    line-height: 1.35;
+    overflow-wrap: anywhere;
+}
+
+.activity-time {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 4px;
+    color: #777;
+    font-size: 11px;
+}
+
+/* =========================================================
+   ZONAS
+   ========================================================= */
+
+.zone-preview {
+    width: 100%;
+}
+
+.zone-summary {
+    margin-bottom: 16px;
+}
+
+.zone-summary-card {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    border: 1px solid #e8e8e8;
+    border-radius: 12px;
+    background: #fafafa;
+}
+
+.zone-summary-card div {
+    display: flex;
+    align-items: baseline;
+    gap: 5px;
+}
+
+.zone-summary-card strong {
+    font-size: 18px;
+}
+
+.zone-summary-card span {
+    color: #777;
+    font-size: 12px;
+}
+
+.zone-days {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.zone-day-card {
+    border: 1px solid #e7e7e7;
+    border-radius: 16px;
+    overflow: hidden;
+    background: #fafafa;
+}
+
+.zone-day-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 17px;
+    background: #f5f5f5;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.zone-day-header div:first-child {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.zone-day-header span {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: #888;
+}
+
+.zone-day-header strong {
+    font-size: 17px;
+}
+
+.zone-day-total {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 6px 10px;
+    border-radius: 999px;
+    background: #ffffff;
+    border: 1px solid #ddd;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.zones-grid {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 10px;
+    padding: 12px;
+}
+
+.zone-card {
+    min-width: 0;
+    background: #ffffff;
+    border: 1px solid #e5e5e5;
+    border-radius: 13px;
+    overflow: hidden;
+}
+
+.zone-card-empty {
+    opacity: 0.7;
+}
+
+.zone-card-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 7px;
+    padding: 11px;
+    background: #fafafa;
+    border-bottom: 1px solid #eeeeee;
+}
+
+.zone-title {
+    display: flex;
+    gap: 7px;
+    min-width: 0;
+}
+
+.zone-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #edf7f0;
+    flex-shrink: 0;
+}
+
+.zone-title div:last-child {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.zone-title strong {
+    font-size: 12px;
+}
+
+.zone-title span {
+    margin-top: 3px;
+    font-size: 9px;
+    line-height: 1.3;
+    color: #888;
+    overflow-wrap: anywhere;
+}
+
+.zone-capacity {
+    flex-shrink: 0;
+    padding: 4px 7px;
+    border-radius: 6px;
+    background: #f0f0f0;
+    font-size: 10px;
+    font-weight: 700;
+}
+
+.zone-people {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    padding: 9px;
+}
+
+.zone-person {
+    display: flex;
+    align-items: flex-start;
+    gap: 7px;
+    padding: 8px;
+    border: 1px solid #eeeeee;
+    border-radius: 9px;
+    background: #fff;
+}
+
+.zone-person-number {
+    width: 22px;
+    height: 22px;
+    border-radius: 6px;
+    background: #f1f1f1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 9px;
+    font-weight: 700;
+}
+
+.zone-person-info {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.zone-person-info strong {
+    font-size: 10px;
+    line-height: 1.3;
+    overflow-wrap: anywhere;
+}
+
+.zone-person-info span {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    margin-top: 3px;
+    color: #888;
+    font-size: 9px;
+}
+
+.zone-no-assignment {
+    padding: 15px 5px;
+    text-align: center;
+    color: #999;
+    font-size: 10px;
+    border: 1px dashed #ddd;
+    border-radius: 8px;
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1200px) {
+
+    .lunch-time-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .zones-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 800px) {
+
+    .planning-section {
+        padding: 16px;
+    }
+
+    .lunch-time-grid,
+    .activity-cards,
+    .zones-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .activity-summary {
+        grid-template-columns: 1fr;
+    }
+
+    .planning-section-header {
+        align-items: flex-start;
+    }
+}
+
+/* =========================================================
+   ACCIONES PRINCIPALES DE PLANIFICACIÓN
+   ========================================================= */
+
+.welcome {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+}
+
+.welcome-info {
+  flex: 1;
+}
+
+/* Contenedor de los tres botones */
+
+.planning-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* Contenedor individual */
+
+.planning-action {
+  display: flex;
+  align-items: center;
+}
+
+/* Botones principales */
+
+.planning-action-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+
+  min-height: 46px;
+
+  padding: 0 17px;
+
+  border: 0;
+  border-radius: 10px;
+
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    opacity 0.18s ease,
+    background 0.18s ease;
+}
+
+/* Hover */
+
+.planning-action-button:not(:disabled):hover {
+  transform: translateY(-1px);
+}
+
+/* Active */
+
+.planning-action-button:not(:disabled):active {
+  transform: translateY(0);
+}
+
+/* Generar */
+
+.planning-action-button.generate {
+  background: #111;
+  color: #fff;
+
+  box-shadow:
+    0 5px 14px rgba(0, 0, 0, 0.12);
+}
+
+.planning-action-button.generate:not(:disabled):hover {
+  box-shadow:
+    0 8px 18px rgba(0, 0, 0, 0.18);
+}
+
+/* Imprimir */
+
+.planning-action-button.print {
+  background: #fff;
+  color: #111;
+
+  border: 1px solid #dedede;
+
+  box-shadow:
+    0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+.planning-action-button.print:not(:disabled):hover {
+  background: #f7f7f7;
+
+  box-shadow:
+    0 7px 16px rgba(0, 0, 0, 0.10);
+}
+
+/* Estado deshabilitado */
+
+.planning-action-button:disabled,
+.planning-action-button.disabled {
+  opacity: 0.45;
+
+  cursor: not-allowed;
+
+  transform: none !important;
+
+  box-shadow: none !important;
+}
+
+/* =========================================================
+   SECCIONES FUTURAS
+   ========================================================= */
+
+.future-section {
+  margin-top: 32px;
+
+  padding: 32px;
+
+  background: #fff;
+
+  border: 1px solid #e8e8e8;
+
+  border-radius: 16px;
+
+  box-shadow:
+    0 4px 18px rgba(0, 0, 0, 0.04);
+}
+
+.future-section h2 {
+  margin: 6px 0 8px;
+
+  font-size: 24px;
+}
+
+.future-section p {
+  margin: 0;
+
+  color: #737373;
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1100px) {
+
+  .welcome {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .planning-actions {
+    width: 100%;
+
+    justify-content: flex-start;
+  }
+
+}
+
+@media (max-width: 700px) {
+
+  .planning-actions {
+    flex-direction: column;
+
+    align-items: stretch;
+  }
+
+  .planning-action,
+  .planning-action-button {
+    width: 100%;
+  }
+
+  .planning-action-button {
+    justify-content: center;
+  }
+
+}

@@ -1,15 +1,16 @@
 import { useState } from 'react'
 
 import {
-  CalendarDays,
-  Users,
-  Clock3,
-  Utensils,
-  Sparkles,
-  ClipboardList,
-  Settings,
-  Menu,
-  X,
+    CalendarDays,
+    Users,
+    Clock3,
+    Utensils,
+    Sparkles,
+    ClipboardList,
+    Settings,
+    Menu,
+    X,
+    Printer,
 } from 'lucide-react'
 
 import ExcelUploader from './components/ExcelUploader'
@@ -21,567 +22,957 @@ import './App.css'
 
 function App() {
 
-  const [
-    sidebarOpen,
-    setSidebarOpen,
-  ] = useState(true)
+    /* =========================================
+       SIDEBAR
+    ========================================= */
 
-  const [
-    scheduleData,
-    setScheduleData,
-  ] = useState(null)
+    const [
+        sidebarOpen,
+        setSidebarOpen
+    ] = useState(true)
 
-  /*
-   * =========================================
-   * EXCEL CARGADO
-   * =========================================
-   */
 
-  const handleExcelLoaded = (data) => {
+    /* =========================================
+       NAVEGACIÓN
+    ========================================= */
 
-    setScheduleData(data)
+    const [
+        activeSection,
+        setActiveSection
+    ] = useState('planning')
 
-    console.log(
-      'HORARIO cargado correctamente:',
-      data
-    )
-  }
 
-  return (
+    /* =========================================
+       DATOS DEL HORARIO
+    ========================================= */
 
-    <div className="app">
+    const [
+        scheduleData,
+        setScheduleData
+    ] = useState(null)
 
-      {/* ========================================= */}
-      {/* SIDEBAR */}
-      {/* ========================================= */}
 
-      <aside
-        className={
-          `sidebar ${
-            sidebarOpen
-              ? 'open'
-              : 'closed'
-          }`
+    /* =========================================
+       ESTADO GLOBAL DE PLANIFICACIÓN
+    ========================================= */
+
+    const [
+        planningGenerated,
+        setPlanningGenerated
+    ] = useState(false)
+
+
+    /* =========================================
+       TRIGGER DE GENERACIÓN
+       
+       Cada vez que aumenta este número,
+       PlanningPreview genera una nueva
+       planificación.
+    ========================================= */
+
+    const [
+        generateTrigger,
+        setGenerateTrigger
+    ] = useState(0)
+
+
+    /* =========================================
+       IMPORTAR HORARIO
+    ========================================= */
+
+    const handleExcelLoaded = (data) => {
+
+        setScheduleData(data)
+
+        /*
+         * Al importar un nuevo Excel,
+         * la planificación anterior deja
+         * de ser válida.
+         */
+
+        setPlanningGenerated(false)
+
+        console.log(
+            'HORARIO cargado correctamente:',
+            data
+        )
+    }
+
+
+    /* =========================================
+       GENERAR PLANIFICACIÓN
+    ========================================= */
+
+    const handleGeneratePlanning = () => {
+
+        if (!scheduleData) {
+            return
         }
-      >
 
-        <div className="sidebar-header">
+        console.log(
+            'GENERAR PLANIFICACIÓN GLOBAL'
+        )
 
-          <div className="nike-logo">
-            NIKE
-          </div>
+        /*
+         * Cambiamos el trigger.
+         *
+         * PlanningPreview está escuchando
+         * este valor y ejecutará toda la
+         * generación de:
+         *
+         * - Almuerzos
+         * - A15
+         * - Limpieza
+         * - Zonas
+         */
 
-          {sidebarOpen && (
+        setGenerateTrigger(
+            previous => previous + 1
+        )
 
-            <span className="planner-title">
+        /*
+         * Estado global para actualizar
+         * estadísticas y botón de imprimir.
+         */
 
-              STAFF
-              <br />
-              PLANNER
+        setPlanningGenerated(true)
 
-            </span>
+        /*
+         * Llevar automáticamente al usuario
+         * a la planificación generada.
+         */
 
-          )}
+        setTimeout(() => {
 
-        </div>
+            const planningElement =
+                document.getElementById(
+                    'section-planning-results'
+                )
 
-        {/* ========================================= */}
-        {/* NAVEGACIÓN */}
-        {/* ========================================= */}
+            if (planningElement) {
 
-        <nav className="navigation">
+                planningElement.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start',
+                })
 
-          <button
-            type="button"
-            className="nav-item active"
-          >
-
-            <CalendarDays
-              size={20}
-            />
-
-            {sidebarOpen && (
-              <span>
-                Planificación
-              </span>
-            )}
-
-          </button>
-
-          <button
-            type="button"
-            className="nav-item"
-          >
-
-            <Users
-              size={20}
-            />
-
-            {sidebarOpen && (
-              <span>
-                Personal
-              </span>
-            )}
-
-          </button>
-
-          <button
-            type="button"
-            className="nav-item"
-          >
-
-            <Clock3
-              size={20}
-            />
-
-            {sidebarOpen && (
-              <span>
-                Horas
-              </span>
-            )}
-
-          </button>
-
-          <button
-            type="button"
-            className="nav-item"
-          >
-
-            <Utensils
-              size={20}
-            />
-
-            {sidebarOpen && (
-              <span>
-                Almuerzos
-              </span>
-            )}
-
-          </button>
-
-          <button
-            type="button"
-            className="nav-item"
-          >
-
-            <Sparkles
-              size={20}
-            />
-
-            {sidebarOpen && (
-              <span>
-                A15 / Limpieza
-              </span>
-            )}
-
-          </button>
-
-          <button
-            type="button"
-            className="nav-item"
-          >
-
-            <ClipboardList
-              size={20}
-            />
-
-            {sidebarOpen && (
-              <span>
-                Cronograma
-              </span>
-            )}
-
-          </button>
-
-        </nav>
-
-        {/* ========================================= */}
-        {/* CONFIGURACIÓN */}
-        {/* ========================================= */}
-
-        <div className="sidebar-bottom">
-
-          <button
-            type="button"
-            className="nav-item"
-          >
-
-            <Settings
-              size={20}
-            />
-
-            {sidebarOpen && (
-              <span>
-                Configuración
-              </span>
-            )}
-
-          </button>
-
-        </div>
-
-      </aside>
-
-      {/* ========================================= */}
-      {/* CONTENIDO PRINCIPAL */}
-      {/* ========================================= */}
-
-      <main className="main-content">
-
-        {/* ========================================= */}
-        {/* TOPBAR */}
-        {/* ========================================= */}
-
-        <header className="topbar">
-
-          <button
-            type="button"
-            className="menu-button"
-            onClick={() =>
-              setSidebarOpen(
-                !sidebarOpen
-              )
             }
-          >
 
-            {sidebarOpen ? (
-              <X size={22} />
-            ) : (
-              <Menu size={22} />
-            )}
+        }, 100)
 
-          </button>
+    }
 
-          <div>
 
-            <h1>
-              Nike Staff Planner
-            </h1>
+    /* =========================================
+       IMPRIMIR
+    ========================================= */
 
-            <p>
-              Gestión inteligente de
-              planificación del personal
-            </p>
+    const handlePrintCronograma = () => {
 
-          </div>
+        if (!planningGenerated) {
+            return
+        }
 
-        </header>
+        console.log(
+            'IMPRIMIR CRONOGRAMA'
+        )
 
-        {/* ========================================= */}
-        {/* CONTENIDO */}
-        {/* ========================================= */}
+        window.print()
+    }
 
-        <section className="content">
 
-          {/* ========================================= */}
-          {/* BIENVENIDA */}
-          {/* ========================================= */}
+    /* =========================================
+       NAVEGACIÓN
+    ========================================= */
 
-          <div className="welcome">
+    const handleNavigation = (section) => {
 
-            <div>
+        setActiveSection(section)
 
-              <span className="eyebrow">
-                PLANIFICACIÓN SEMANAL
-              </span>
+        let sectionId = null
 
-              <h2>
-                Quicentro
-              </h2>
+        switch (section) {
 
-              <p>
-                Organiza las actividades
-                del equipo de forma rápida
-                y eficiente.
-              </p>
+            case 'planning':
+                sectionId =
+                    'section-planning'
+                break
 
-            </div>
+            case 'personal':
+                sectionId =
+                    'section-personal'
+                break
 
-            <ExcelUploader
-              onDataLoaded={
-                handleExcelLoaded
-              }
-            />
+            case 'hours':
+                sectionId =
+                    'section-hours'
+                break
 
-          </div>
+            case 'lunch':
+                sectionId =
+                    'section-lunch'
+                break
 
-          {/* ========================================= */}
-          {/* ESTADÍSTICAS */}
-          {/* ========================================= */}
+            case 'activities':
+                sectionId =
+                    'section-planning-results'
+                break
 
-          <div className="stats-grid">
+            case 'cronograma':
+                sectionId =
+                    'section-planning-results'
+                break
 
-            {/* PERSONAL */}
+            case 'settings':
+                sectionId =
+                    'section-settings'
+                break
 
-            <div className="stat-card">
+            default:
+                break
+        }
 
-              <div className="stat-icon">
+        if (!sectionId) {
+            return
+        }
 
-                <Users
-                  size={22}
-                />
+        const sectionElement =
+            document.getElementById(
+                sectionId
+            )
 
-              </div>
+        if (sectionElement) {
 
-              <div>
+            sectionElement.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start',
+            })
 
-                <span>
-                  Personal
-                </span>
+        }
 
-                <strong>
+    }
 
-                  {scheduleData
-                    ? scheduleData
-                      .employees
-                      .length
-                    : 0}
 
-                </strong>
+    /* =========================================
+       ESTADOS
+    ========================================= */
 
-                <small>
-                  Colaboradores activos
-                </small>
+    const hasSchedule =
+        Boolean(scheduleData)
 
-              </div>
 
-            </div>
+    /* =========================================
+       RENDER
+    ========================================= */
 
-            {/* HORAS */}
+    return (
 
-            <div className="stat-card">
+        <div className="app">
 
-              <div className="stat-icon">
+            {/* ========================================= */}
+            {/* SIDEBAR */}
+            {/* ========================================= */}
 
-                <Clock3
-                  size={22}
-                />
+            <aside
+                className={`sidebar ${
+                    sidebarOpen
+                        ? 'open'
+                        : 'closed'
+                }`}
+            >
 
-              </div>
+                {/* HEADER */}
 
-              <div>
+                <div className="sidebar-header">
 
-                <span>
-                  Horas planificadas
-                </span>
+                    <div className="nike-logo">
+                        NIKE
+                    </div>
 
-                <strong>
+                    {sidebarOpen && (
 
-                  {scheduleData
-                    ? scheduleData.employees.reduce(
-                      (
-                        total,
-                        employee
-                      ) =>
-                        total +
-                        (
-                          employee.weeklyHours ||
-                          0
-                        ),
-                      0
-                    )
-                    : 0}
+                        <span className="planner-title">
 
-                  {' '}h
+                            STAFF
+                            <br />
+                            PLANNER
 
-                </strong>
+                        </span>
 
-                <small>
-                  Esta semana
-                </small>
+                    )}
 
-              </div>
+                </div>
 
-            </div>
 
-            {/* ALMUERZOS */}
+                {/* NAVEGACIÓN */}
 
-            <div className="stat-card">
+                <nav className="navigation">
 
-              <div className="stat-icon">
+                    {/* PLANIFICACIÓN */}
 
-                <Utensils
-                  size={22}
-                />
+                    <button
+                        className={`nav-item ${
+                            activeSection === 'planning'
+                                ? 'active'
+                                : ''
+                        }`}
+                        onClick={() =>
+                            handleNavigation(
+                                'planning'
+                            )
+                        }
+                    >
 
-              </div>
+                        <CalendarDays
+                            size={20}
+                        />
 
-              <div>
+                        {sidebarOpen && (
+                            <span>
+                                Planificación
+                            </span>
+                        )}
 
-                <span>
-                  Almuerzos
-                </span>
+                    </button>
 
-                <strong>
-                  -
-                </strong>
 
-                <small>
-                  Turnos asignados
-                </small>
+                    {/* PERSONAL */}
 
-              </div>
+                    <button
+                        className={`nav-item ${
+                            activeSection === 'personal'
+                                ? 'active'
+                                : ''
+                        }`}
+                        onClick={() =>
+                            handleNavigation(
+                                'personal'
+                            )
+                        }
+                    >
 
-            </div>
+                        <Users size={20} />
 
-            {/* ACTIVIDADES */}
+                        {sidebarOpen && (
+                            <span>
+                                Personal
+                            </span>
+                        )}
 
-            <div className="stat-card">
+                    </button>
 
-              <div className="stat-icon">
 
-                <Sparkles
-                  size={22}
-                />
+                    {/* HORAS */}
 
-              </div>
+                    <button
+                        className={`nav-item ${
+                            activeSection === 'hours'
+                                ? 'active'
+                                : ''
+                        }`}
+                        onClick={() =>
+                            handleNavigation(
+                                'hours'
+                            )
+                        }
+                    >
 
-              <div>
+                        <Clock3 size={20} />
 
-                <span>
-                  Actividades
-                </span>
+                        {sidebarOpen && (
+                            <span>
+                                Horas
+                            </span>
+                        )}
 
-                <strong>
-                  -
-                </strong>
+                    </button>
 
-                <small>
-                  A15 y limpieza
-                </small>
 
-              </div>
+                    {/* ALMUERZOS */}
 
-            </div>
+                    <button
+                        className={`nav-item ${
+                            activeSection === 'lunch'
+                                ? 'active'
+                                : ''
+                        }`}
+                        onClick={() =>
+                            handleNavigation(
+                                'lunch'
+                            )
+                        }
+                    >
 
-          </div>
+                        <Utensils size={20} />
 
-          {/* ========================================= */}
-          {/* SEMANA */}
-          {/* ========================================= */}
+                        {sidebarOpen && (
+                            <span>
+                                Almuerzos
+                            </span>
+                        )}
 
-          <section className="panel">
+                    </button>
 
-            <div className="panel-header">
 
-              <div>
+                    {/* ACTIVIDADES */}
 
-                <h3>
-                  Semana actual
-                </h3>
+                    <button
+                        className={`nav-item ${
+                            activeSection === 'activities'
+                                ? 'active'
+                                : ''
+                        }`}
+                        onClick={() =>
+                            handleNavigation(
+                                'activities'
+                            )
+                        }
+                    >
 
-                <p>
+                        <Sparkles size={20} />
 
-                  {scheduleData
-                    ? 'Horario importado correctamente'
-                    : 'Planificación del equipo'}
+                        {sidebarOpen && (
+                            <span>
+                                A15 / Limpieza
+                            </span>
+                        )}
 
-                </p>
+                    </button>
 
-              </div>
 
-              <div className="week-selector">
+                    {/* CRONOGRAMA */}
 
-                <CalendarDays
-                  size={18}
-                />
+                    <button
+                        className={`nav-item ${
+                            activeSection === 'cronograma'
+                                ? 'active'
+                                : ''
+                        }`}
+                        onClick={() =>
+                            handleNavigation(
+                                'cronograma'
+                            )
+                        }
+                    >
 
-                <span>
+                        <ClipboardList
+                            size={20}
+                        />
 
-                  {scheduleData
-                    ? `${scheduleData.weekInfo.days[0].date} ${scheduleData.weekInfo.month} — ${scheduleData.weekInfo.days[6].date} ${scheduleData.weekInfo.month}`
-                    : 'Sin horario importado'}
+                        {sidebarOpen && (
+                            <span>
+                                Cronograma
+                            </span>
+                        )}
 
-                </span>
+                    </button>
 
-              </div>
+                </nav>
 
-            </div>
 
-            <div className="empty-schedule">
+                {/* CONFIGURACIÓN */}
 
-              <CalendarDays
-                size={42}
-              />
+                <div className="sidebar-bottom">
 
-              <h3>
+                    <button
+                        className={`nav-item ${
+                            activeSection === 'settings'
+                                ? 'active'
+                                : ''
+                        }`}
+                        onClick={() =>
+                            handleNavigation(
+                                'settings'
+                            )
+                        }
+                    >
 
-                {scheduleData
-                  ? 'Horario cargado correctamente'
-                  : 'Aún no existe una planificación'}
+                        <Settings size={20} />
 
-              </h3>
+                        {sidebarOpen && (
+                            <span>
+                                Configuración
+                            </span>
+                        )}
 
-              <p>
+                    </button>
 
-                {scheduleData
-                  ? 'El archivo HORARIO fue leído correctamente. Ahora podemos generar automáticamente la planificación.'
-                  : 'Importa el horario Excel para comenzar a generar la planificación automáticamente.'}
+                </div>
 
-              </p>
+            </aside>
 
-              {!scheduleData && (
 
-                <ExcelUploader
-                  onDataLoaded={
-                    handleExcelLoaded
-                  }
-                />
+            {/* ========================================= */}
+            {/* CONTENIDO */}
+            {/* ========================================= */}
 
-              )}
+            <main className="main-content">
 
-            </div>
+                {/* ========================================= */}
+                {/* TOPBAR */}
+                {/* ========================================= */}
 
-          </section>
+                <header className="topbar">
 
-          {/* ========================================= */}
-          {/* HORARIO */}
-          {/* ========================================= */}
+                    <button
+                        className="menu-button"
+                        onClick={() =>
+                            setSidebarOpen(
+                                !sidebarOpen
+                            )
+                        }
+                    >
 
-          {scheduleData && (
+                        {sidebarOpen ? (
 
-            <SchedulePreview
-              employees={
-                scheduleData.employees
-              }
-            />
+                            <X size={22} />
 
-          )}
+                        ) : (
 
-          {/* ========================================= */}
-          {/* DISPONIBILIDAD + ALMUERZOS */}
-          {/* ========================================= */}
+                            <Menu size={22} />
 
-          {scheduleData && (
+                        )}
 
-            <AvailabilityPreview
-              employees={
-                scheduleData.employees
-              }
-            />
+                    </button>
 
-          )}
 
-          {/* ========================================= */}
-          {/* PLANIFICACIÓN */}
-          {/* ========================================= */}
+                    <div>
 
-          {scheduleData && (
+                        <h1>
+                            Nike Staff Planner
+                        </h1>
 
-            <PlanningPreview
-              employees={
-                scheduleData.employees
-              }
-            />
+                        <p>
+                            Gestión inteligente de
+                            planificación del personal
+                        </p>
 
-          )}
+                    </div>
 
-        </section>
+                </header>
 
-      </main>
 
-    </div>
-  )
+                {/* ========================================= */}
+                {/* CONTENIDO PRINCIPAL */}
+                {/* ========================================= */}
+
+                <section className="content">
+
+                    {/* ========================================= */}
+                    {/* BIENVENIDA + ACCIONES */}
+                    {/* ========================================= */}
+
+                    <div
+                        className="welcome"
+                        id="section-planning"
+                    >
+
+                        <div className="welcome-info">
+
+                            <span className="eyebrow">
+                                PLANIFICACIÓN SEMANAL
+                            </span>
+
+                            <h2>
+                                Quicentro
+                            </h2>
+
+                            <p>
+                                Organiza las actividades
+                                del equipo de forma rápida
+                                y eficiente.
+                            </p>
+
+                        </div>
+
+
+                        {/* ===================================== */}
+                        {/* ACCIONES */}
+                        {/* ===================================== */}
+
+                        <div className="planning-actions">
+
+                            {/* IMPORTAR */}
+
+                            <div className="planning-action">
+
+                                <ExcelUploader
+                                    onDataLoaded={
+                                        handleExcelLoaded
+                                    }
+                                />
+
+                            </div>
+
+
+                            {/* GENERAR */}
+
+                            <button
+                                className={`planning-action-button generate ${
+                                    !hasSchedule
+                                        ? 'disabled'
+                                        : ''
+                                }`}
+                                onClick={
+                                    handleGeneratePlanning
+                                }
+                                disabled={
+                                    !hasSchedule
+                                }
+                                title={
+                                    !hasSchedule
+                                        ? 'Primero importa el horario Excel'
+                                        : 'Generar planificación semanal'
+                                }
+                            >
+
+                                <Sparkles
+                                    size={19}
+                                />
+
+                                <span>
+
+                                    {planningGenerated
+                                        ? 'Regenerar planificación'
+                                        : 'Generar planificación'}
+
+                                </span>
+
+                            </button>
+
+
+                            {/* IMPRIMIR */}
+
+                            <button
+                                className={`planning-action-button print ${
+                                    !planningGenerated
+                                        ? 'disabled'
+                                        : ''
+                                }`}
+                                onClick={
+                                    handlePrintCronograma
+                                }
+                                disabled={
+                                    !planningGenerated
+                                }
+                                title={
+                                    !planningGenerated
+                                        ? 'Primero genera la planificación'
+                                        : 'Imprimir cronograma'
+                                }
+                            >
+
+                                <Printer
+                                    size={19}
+                                />
+
+                                <span>
+                                    Imprimir cronograma
+                                </span>
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                    {/* ========================================= */}
+                    {/* ESTADÍSTICAS */}
+                    {/* ========================================= */}
+
+                    <div className="stats-grid">
+
+                        {/* PERSONAL */}
+
+                        <div className="stat-card">
+
+                            <div className="stat-icon">
+                                <Users size={22} />
+                            </div>
+
+                            <div>
+
+                                <span>
+                                    Personal
+                                </span>
+
+                                <strong>
+                                    {scheduleData
+                                        ? scheduleData
+                                            .employees
+                                            .length
+                                        : 0}
+                                </strong>
+
+                                <small>
+                                    Colaboradores activos
+                                </small>
+
+                            </div>
+
+                        </div>
+
+
+                        {/* HORAS */}
+
+                        <div className="stat-card">
+
+                            <div className="stat-icon">
+                                <Clock3 size={22} />
+                            </div>
+
+                            <div>
+
+                                <span>
+                                    Horas planificadas
+                                </span>
+
+                                <strong>
+
+                                    {scheduleData
+                                        ? scheduleData.employees.reduce(
+                                            (
+                                                total,
+                                                employee
+                                            ) =>
+                                                total +
+                                                employee.weeklyHours,
+                                            0
+                                        )
+                                        : 0}{' '}
+                                    h
+
+                                </strong>
+
+                                <small>
+                                    Esta semana
+                                </small>
+
+                            </div>
+
+                        </div>
+
+
+                        {/* ALMUERZOS */}
+
+                        <div className="stat-card">
+
+                            <div className="stat-icon">
+                                <Utensils size={22} />
+                            </div>
+
+                            <div>
+
+                                <span>
+                                    Almuerzos
+                                </span>
+
+                                <strong>
+                                    {planningGenerated
+                                        ? '✓'
+                                        : '-'}
+                                </strong>
+
+                                <small>
+                                    Turnos asignados
+                                </small>
+
+                            </div>
+
+                        </div>
+
+
+                        {/* ACTIVIDADES */}
+
+                        <div className="stat-card">
+
+                            <div className="stat-icon">
+                                <Sparkles size={22} />
+                            </div>
+
+                            <div>
+
+                                <span>
+                                    Actividades
+                                </span>
+
+                                <strong>
+                                    {planningGenerated
+                                        ? '✓'
+                                        : '-'}
+                                </strong>
+
+                                <small>
+                                    A15 y limpieza
+                                </small>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    {/* ========================================= */}
+                    {/* SEMANA ACTUAL */}
+                    {/* ========================================= */}
+
+                    <section className="panel">
+
+                        <div className="panel-header">
+
+                            <div>
+
+                                <h3>
+                                    Semana actual
+                                </h3>
+
+                                <p>
+
+                                    {scheduleData
+                                        ? 'Horario importado correctamente'
+                                        : 'Planificación del equipo'}
+
+                                </p>
+
+                            </div>
+
+
+                            <div className="week-selector">
+
+                                <CalendarDays
+                                    size={18}
+                                />
+
+                                <span>
+
+                                    {scheduleData
+                                        ? `${scheduleData.weekInfo.days[0].date} ${scheduleData.weekInfo.month} — ${scheduleData.weekInfo.days[6].date} ${scheduleData.weekInfo.month}`
+                                        : 'Sin horario importado'}
+
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <div className="empty-schedule">
+
+                            <CalendarDays
+                                size={42}
+                            />
+
+                            <h3>
+
+                                {scheduleData
+                                    ? planningGenerated
+                                        ? 'Planificación generada correctamente'
+                                        : 'Horario cargado correctamente'
+                                    : 'Aún no existe una planificación'}
+
+                            </h3>
+
+
+                            <p>
+
+                                {scheduleData
+                                    ? planningGenerated
+                                        ? 'El horario fue procesado y la planificación semanal está disponible más abajo.'
+                                        : 'El archivo HORARIO fue leído correctamente. Ahora puedes generar automáticamente la planificación.'
+                                    : 'Importa el horario Excel para comenzar a generar la planificación automáticamente.'}
+
+                            </p>
+
+
+                            {!scheduleData && (
+
+                                <ExcelUploader
+                                    onDataLoaded={
+                                        handleExcelLoaded
+                                    }
+                                />
+
+                            )}
+
+                        </div>
+
+                    </section>
+
+
+                    {/* ========================================= */}
+                    {/* HORARIO */}
+                    {/* ========================================= */}
+
+                    {scheduleData && (
+
+                        <section
+                            id="section-personal"
+                        >
+
+                            <SchedulePreview
+                                employees={
+                                    scheduleData.employees
+                                }
+                            />
+
+                        </section>
+
+                    )}
+
+
+                    {/* ========================================= */}
+                    {/* DISPONIBILIDAD */}
+                    {/* ========================================= */}
+
+                    {scheduleData && (
+
+                        <section
+                            id="section-lunch"
+                        >
+
+                            <AvailabilityPreview
+                                employees={
+                                    scheduleData.employees
+                                }
+                            />
+
+                        </section>
+
+                    )}
+
+
+                    {/* ========================================= */}
+                    {/* PLANIFICACIÓN COMPLETA */}
+                    {/* ========================================= */}
+
+                    {scheduleData && (
+
+                        <section
+                            id="section-planning-results"
+                        >
+
+                            <PlanningPreview
+                                employees={
+                                    scheduleData.employees
+                                }
+                                generateTrigger={
+                                    generateTrigger
+                                }
+                            />
+
+                        </section>
+
+                    )}
+
+                </section>
+
+            </main>
+
+        </div>
+
+    )
 }
 
 export default App

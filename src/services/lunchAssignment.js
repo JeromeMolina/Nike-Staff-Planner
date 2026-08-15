@@ -877,3 +877,100 @@ export function groupAssignmentsByLunchTime(
 
     return groups
 }
+
+/**
+ * ============================================================
+ * GENERAR PLANIFICACIÓN SEMANAL DE ALMUERZOS
+ * ============================================================
+ *
+ * Ejecuta el motor de almuerzos para los 7 días.
+ *
+ * El motor individual sigue siendo:
+ *
+ * generateLunchAssignments(employees, day)
+ *
+ * Esta función simplemente centraliza la ejecución semanal.
+ */
+
+export function generateWeeklyLunchAssignments(
+    employees
+) {
+    const DAYS = [
+        {
+            id: 'monday',
+            name: 'Lunes',
+        },
+        {
+            id: 'tuesday',
+            name: 'Martes',
+        },
+        {
+            id: 'wednesday',
+            name: 'Miércoles',
+        },
+        {
+            id: 'thursday',
+            name: 'Jueves',
+        },
+        {
+            id: 'friday',
+            name: 'Viernes',
+        },
+        {
+            id: 'saturday',
+            name: 'Sábado',
+        },
+        {
+            id: 'sunday',
+            name: 'Domingo',
+        },
+    ]
+
+    const byDay = {}
+
+    let allAssignments = []
+    let allPending = []
+
+    DAYS.forEach((day) => {
+        const result =
+            generateLunchAssignments(
+                employees,
+                day.id
+            )
+
+        byDay[day.id] = {
+            dayId: day.id,
+            dayName: day.name,
+            assignments:
+                result.assignments,
+            pending:
+                result.pending,
+            summary:
+                result.summary,
+        }
+
+        allAssignments.push(
+            ...result.assignments
+        )
+
+        allPending.push(
+            ...result.pending
+        )
+    })
+
+    return {
+        byDay,
+
+        assignments:
+            allAssignments,
+
+        pending:
+            allPending,
+
+        totalAssigned:
+            allAssignments.length,
+
+        totalPending:
+            allPending.length,
+    }
+}

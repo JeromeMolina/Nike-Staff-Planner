@@ -1,9 +1,13 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+
 import {
     CalendarDays,
     Sparkles,
     RefreshCw,
     CheckCircle2,
+    Utensils,
+    ClipboardList,
+    MapPin,
 } from 'lucide-react'
 
 import {
@@ -18,73 +22,104 @@ import {
     generateWeeklyZoneAssignments,
 } from '../services/zoneAssignment'
 
+import {
+    generateLunchAssignments,
+} from '../services/lunchAssignment'
+
 import ActivityPreview from './ActivityPreview'
 import ZonePreview from './ZonePreview'
 
-function PlanningPreview({ employees }) {
+const DAYS = [
+    { id: 'monday', name: 'Lunes' },
+    { id: 'tuesday', name: 'Martes' },
+    { id: 'wednesday', name: 'Miércoles' },
+    { id: 'thursday', name: 'Jueves' },
+    { id: 'friday', name: 'Viernes' },
+    { id: 'saturday', name: 'Sábado' },
+    { id: 'sunday', name: 'Domingo' },
+]
 
-    const [
-        planningGenerated,
-        setPlanningGenerated,
-    ] = useState(false)
+function PlanningPreview({
+    employees,
+    generateTrigger,
+    onPlanningGenerated,
+}) {
 
-    const [
-        a15Assignments,
-        setA15Assignments,
-    ] = useState([])
+    /* =========================================
+       ESTADO
+    ========================================= */
 
-    const [
-        cleaningAssignments,
-        setCleaningAssignments,
-    ] = useState([])
+    const [planningGenerated, setPlanningGenerated] =
+        useState(false)
 
-    const [
-        zoneAssignments,
-        setZoneAssignments,
-    ] = useState({})
+    const [a15Assignments, setA15Assignments] =
+        useState([])
 
-    if (
-        !employees ||
-        employees.length === 0
-    ) {
-        return null
-    }
+    const [cleaningAssignments, setCleaningAssignments] =
+        useState([])
+
+    const [zoneAssignments, setZoneAssignments] =
+        useState({})
+
+    const [lunchAssignments, setLunchAssignments] =
+        useState({})
+
+    /* =========================================
+       LIMPIAR PLANIFICACIÓN
+       CUANDO CAMBIA EL HORARIO
+    ========================================= */
+
+    useEffect(() => {
+
+        setPlanningGenerated(false)
+        setA15Assignments([])
+        setCleaningAssignments([])
+        setZoneAssignments({})
+        setLunchAssignments({})
+
+    }, [employees])
+
+    /* =========================================
+       GENERAR PLANIFICACIÓN COMPLETA
+    ========================================= */
 
     const handleGeneratePlanning = () => {
 
+        if (
+            !employees ||
+            employees.length === 0
+        ) {
+            console.warn(
+                'No existen empleados para generar la planificación.'
+            )
+
+            return
+        }
+
         console.log(
-            '===================================='
+            '================================='
         )
 
         console.log(
-            'GENERANDO PLANIFICACIÓN...'
+            'INICIANDO GENERACIÓN COMPLETA'
         )
 
         console.log(
-            'Empleados:',
-            employees
+            '================================='
         )
 
-        /*
-         * ====================================
-         * A15
-         * ====================================
-         */
+        /* =====================================
+           A15
+        ===================================== */
 
         const a15Result =
             generateWeeklyA15Assignments(
                 employees
             )
 
-        /*
-         * ====================================
-         * LIMPIEZA
-         * ====================================
-         *
-         * Se envían las asignaciones de A15
-         * para impedir que una persona haga
-         * ambas actividades el mismo día.
-         */
+        /* =====================================
+           LIMPIEZA
+        ===================================== */
 
         const cleaningResult =
             generateWeeklyCleaningAssignments(
@@ -92,22 +127,38 @@ function PlanningPreview({ employees }) {
                 a15Result.assignments
             )
 
-        /*
-         * ====================================
-         * ZONAS
-         * ====================================
-         */
+        /* =====================================
+           ZONAS
+        ===================================== */
 
         const zoneResult =
             generateWeeklyZoneAssignments(
                 employees
             )
 
-        /*
-         * ====================================
-         * GUARDAR RESULTADOS
-         * ====================================
-         */
+        /* =====================================
+           ALMUERZOS
+        ===================================== */
+
+        const weeklyLunchAssignments = {}
+
+        DAYS.forEach((day) => {
+
+            const result =
+                generateLunchAssignments(
+                    employees,
+                    day.id
+                )
+
+            weeklyLunchAssignments[
+                day.id
+            ] = result
+
+        })
+
+        /* =====================================
+           GUARDAR RESULTADOS
+        ===================================== */
 
         setA15Assignments(
             a15Result.assignments
@@ -121,16 +172,27 @@ function PlanningPreview({ employees }) {
             zoneResult.byDay
         )
 
+        setLunchAssignments(
+            weeklyLunchAssignments
+        )
+
         setPlanningGenerated(true)
 
         /*
-         * ====================================
-         * DEBUG
-         * ====================================
+         * Avisamos a App.jsx que la planificación
+         * terminó correctamente.
          */
 
+        if (onPlanningGenerated) {
+            onPlanningGenerated()
+        }
+
+        /* =====================================
+           CONSOLA
+        ===================================== */
+
         console.log(
-            'PLANIFICACIÓN GENERADA CORRECTAMENTE'
+            'PLANIFICACIÓN COMPLETA GENERADA'
         )
 
         console.log(
@@ -149,15 +211,58 @@ function PlanningPreview({ employees }) {
         )
 
         console.log(
-            '===================================='
+            'ALMUERZOS:',
+            weeklyLunchAssignments
         )
+
     }
 
-    /*
-     * ========================================
-     * TOTAL DE ASIGNACIONES DE ZONAS
-     * ========================================
-     */
+    /* =========================================
+       ESCUCHAR BOTÓN SUPERIOR
+    ========================================= */
+
+    useEffect(() => {
+
+        if (
+            generateTrigger > 0
+        ) {
+
+            handleGeneratePlanning()
+
+        }
+
+    }, [generateTrigger])
+
+    /* =========================================
+       VALIDACIÓN
+    ========================================= */
+
+    if (
+        !employees ||
+        employees.length === 0
+    ) {
+        return null
+    }
+
+    /* =========================================
+       TOTALES
+    ========================================= */
+
+    const totalLunchAssignments =
+        Object.values(
+            lunchAssignments
+        ).reduce(
+            (
+                total,
+                day
+            ) =>
+                total +
+                (
+                    day?.assignments?.length ||
+                    0
+                ),
+            0
+        )
 
     const totalZoneAssignments =
         Object.values(
@@ -176,10 +281,11 @@ function PlanningPreview({ employees }) {
         )
 
     return (
+
         <section className="planning-preview">
 
             {/* ================================= */}
-            {/* HEADER PRINCIPAL */}
+            {/* HEADER */}
             {/* ================================= */}
 
             <div className="planning-main-header">
@@ -201,46 +307,18 @@ function PlanningPreview({ employees }) {
                         </span>
 
                         <h2>
-                            Actividades y zonas
+                            Planificación semanal
                         </h2>
 
                         <p>
-                            Genera automáticamente
-                            la distribución semanal
-                            del equipo.
+                            La planificación se genera
+                            desde el botón principal
+                            ubicado en la parte superior.
                         </p>
 
                     </div>
 
                 </div>
-
-                <button
-                    type="button"
-                    className="generate-planning-button"
-                    onClick={
-                        handleGeneratePlanning
-                    }
-                >
-
-                    {planningGenerated ? (
-                        <RefreshCw
-                            size={19}
-                        />
-                    ) : (
-                        <Sparkles
-                            size={19}
-                        />
-                    )}
-
-                    <span>
-
-                        {planningGenerated
-                            ? 'Regenerar planificación'
-                            : 'Generar planificación'}
-
-                    </span>
-
-                </button>
 
             </div>
 
@@ -268,10 +346,9 @@ function PlanningPreview({ employees }) {
                         </strong>
 
                         <span>
-                            Presiona el botón para
-                            generar A15, limpieza
-                            y distribución de zonas
-                            automáticamente.
+                            Utiliza el botón
+                            "Generar planificación"
+                            de la parte superior.
                         </span>
 
                     </div>
@@ -294,17 +371,31 @@ function PlanningPreview({ employees }) {
 
                     <div className="planning-result-summary">
 
-                        {/* A15 */}
+                        <div className="planning-result-card">
+
+                            <Utensils size={19} />
+
+                            <div>
+
+                                <strong>
+                                    {
+                                        totalLunchAssignments
+                                    }
+                                </strong>
+
+                                <span>
+                                    Almuerzos asignados
+                                </span>
+
+                            </div>
+
+                            <CheckCircle2 size={18} />
+
+                        </div>
 
                         <div className="planning-result-card">
 
-                            <div className="planning-result-card-icon">
-
-                                <Sparkles
-                                    size={19}
-                                />
-
-                            </div>
+                            <Sparkles size={19} />
 
                             <div>
 
@@ -320,24 +411,13 @@ function PlanningPreview({ employees }) {
 
                             </div>
 
-                            <CheckCircle2
-                                className="planning-result-check"
-                                size={18}
-                            />
+                            <CheckCircle2 size={18} />
 
                         </div>
 
-                        {/* LIMPIEZA */}
-
                         <div className="planning-result-card">
 
-                            <div className="planning-result-card-icon">
-
-                                <CalendarDays
-                                    size={19}
-                                />
-
-                            </div>
+                            <ClipboardList size={19} />
 
                             <div>
 
@@ -353,24 +433,13 @@ function PlanningPreview({ employees }) {
 
                             </div>
 
-                            <CheckCircle2
-                                className="planning-result-check"
-                                size={18}
-                            />
+                            <CheckCircle2 size={18} />
 
                         </div>
 
-                        {/* ZONAS */}
-
                         <div className="planning-result-card">
 
-                            <div className="planning-result-card-icon">
-
-                                <CalendarDays
-                                    size={19}
-                                />
-
-                            </div>
+                            <MapPin size={19} />
 
                             <div>
 
@@ -386,43 +455,357 @@ function PlanningPreview({ employees }) {
 
                             </div>
 
-                            <CheckCircle2
-                                className="planning-result-check"
-                                size={18}
-                            />
+                            <CheckCircle2 size={18} />
 
                         </div>
 
                     </div>
 
                     {/* ================================= */}
+                    {/* ALMUERZOS */}
+                    {/* ================================= */}
+
+                    <section className="planning-section">
+
+                        <div className="planning-section-header">
+
+                            <div className="planning-section-icon lunch-icon">
+
+                                <Utensils
+                                    size={21}
+                                />
+
+                            </div>
+
+                            <div>
+
+                                <span className="eyebrow">
+                                    ALMUERZOS
+                                </span>
+
+                                <h3>
+                                    Distribución de almuerzos
+                                </h3>
+
+                                <p>
+                                    Horarios asignados
+                                    automáticamente según
+                                    prioridad de ingreso.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                        <div className="weekly-lunch-container">
+
+                            {DAYS.map((day) => {
+
+                                const result =
+                                    lunchAssignments[
+                                        day.id
+                                    ]
+
+                                if (!result) {
+                                    return null
+                                }
+
+                                const assignments =
+                                    result.assignments || []
+
+                                const times = [
+                                    {
+                                        shift: 1,
+                                        start: '12:30',
+                                        end: '13:30',
+                                    },
+                                    {
+                                        shift: 2,
+                                        start: '13:30',
+                                        end: '14:30',
+                                    },
+                                    {
+                                        shift: 3,
+                                        start: '14:30',
+                                        end: '15:30',
+                                    },
+                                    {
+                                        shift: 4,
+                                        start: '15:30',
+                                        end: '16:30',
+                                    },
+                                ]
+
+                                return (
+
+                                    <div
+                                        className="weekly-lunch-day"
+                                        key={day.id}
+                                    >
+
+                                        <div className="weekly-day-header">
+
+                                            <div>
+
+                                                <span>
+                                                    DÍA
+                                                </span>
+
+                                                <strong>
+                                                    {day.name}
+                                                </strong>
+
+                                            </div>
+
+                                            <span className="day-total-badge">
+
+                                                {
+                                                    assignments.length
+                                                } personas
+
+                                            </span>
+
+                                        </div>
+
+                                        <div className="lunch-time-grid">
+
+                                            {times.map(
+                                                (time) => {
+
+                                                    const people =
+                                                        assignments.filter(
+                                                            (
+                                                                assignment
+                                                            ) =>
+                                                                assignment.lunchShift ===
+                                                                time.shift
+                                                        )
+
+                                                    return (
+
+                                                        <div
+                                                            className="lunch-time-card"
+                                                            key={
+                                                                time.shift
+                                                            }
+                                                        >
+
+                                                            <div className="lunch-time-card-header">
+
+                                                                <div className="lunch-time-main">
+
+                                                                    <div className="lunch-time-icon">
+
+                                                                        <Utensils
+                                                                            size={16}
+                                                                        />
+
+                                                                    </div>
+
+                                                                    <div>
+
+                                                                        <strong>
+                                                                            {
+                                                                                time.start
+                                                                            }
+                                                                        </strong>
+
+                                                                        <span>
+                                                                            {
+                                                                                time.start
+                                                                            }
+                                                                            {' '}
+                                                                            —
+                                                                            {' '}
+                                                                            {
+                                                                                time.end
+                                                                            }
+                                                                        </span>
+
+                                                                    </div>
+
+                                                                </div>
+
+                                                                <span className="lunch-people-count">
+
+                                                                    {
+                                                                        people.length
+                                                                    }
+
+                                                                </span>
+
+                                                            </div>
+
+                                                            <div className="lunch-people-list">
+
+                                                                {people.length ===
+                                                                0 ? (
+
+                                                                    <div className="lunch-no-assignment">
+                                                                        Sin asignación
+                                                                    </div>
+
+                                                                ) : (
+
+                                                                    people.map(
+                                                                        (
+                                                                            person
+                                                                        ) => (
+
+                                                                            <div
+                                                                                className="lunch-person-card"
+                                                                                key={
+                                                                                    person.employeeId
+                                                                                }
+                                                                            >
+
+                                                                                <div className="lunch-person-number">
+                                                                                    #
+                                                                                </div>
+
+                                                                                <div>
+
+                                                                                    <strong>
+                                                                                        {
+                                                                                            person.employeeName
+                                                                                        }
+                                                                                    </strong>
+
+                                                                                    <span>
+                                                                                        Entrada:
+                                                                                        {' '}
+                                                                                        {
+                                                                                            person.start
+                                                                                        }
+                                                                                    </span>
+
+                                                                                </div>
+
+                                                                            </div>
+
+                                                                        )
+                                                                    )
+
+                                                                )}
+
+                                                            </div>
+
+                                                        </div>
+
+                                                    )
+
+                                                }
+                                            )}
+
+                                        </div>
+
+                                    </div>
+
+                                )
+
+                            })}
+
+                        </div>
+
+                    </section>
+
+                    {/* ================================= */}
                     {/* ACTIVIDADES */}
                     {/* ================================= */}
 
-                    <ActivityPreview
-                        a15Assignments={
-                            a15Assignments
-                        }
-                        cleaningAssignments={
-                            cleaningAssignments
-                        }
-                    />
+                    <section className="planning-section">
+
+                        <div className="planning-section-header">
+
+                            <div className="planning-section-icon activity-icon">
+
+                                <Sparkles
+                                    size={21}
+                                />
+
+                            </div>
+
+                            <div>
+
+                                <span className="eyebrow">
+                                    ACTIVIDADES
+                                </span>
+
+                                <h3>
+                                    A15 y Limpieza
+                                </h3>
+
+                                <p>
+                                    Distribución diaria
+                                    de las actividades
+                                    del equipo.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                        <ActivityPreview
+                            a15Assignments={
+                                a15Assignments
+                            }
+                            cleaningAssignments={
+                                cleaningAssignments
+                            }
+                        />
+
+                    </section>
 
                     {/* ================================= */}
                     {/* ZONAS */}
                     {/* ================================= */}
 
-                    <ZonePreview
-                        zoneAssignments={
-                            zoneAssignments
-                        }
-                    />
+                    <section className="planning-section">
+
+                        <div className="planning-section-header">
+
+                            <div className="planning-section-icon zone-icon">
+
+                                <MapPin
+                                    size={21}
+                                />
+
+                            </div>
+
+                            <div>
+
+                                <span className="eyebrow">
+                                    PISO DE VENTAS
+                                </span>
+
+                                <h3>
+                                    Distribución de zonas
+                                </h3>
+
+                                <p>
+                                    Asignación del personal
+                                    a las diferentes
+                                    ubicaciones de la tienda.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                        <ZonePreview
+                            zoneAssignments={
+                                zoneAssignments
+                            }
+                        />
+
+                    </section>
 
                 </>
 
             )}
 
         </section>
+
     )
 }
 
