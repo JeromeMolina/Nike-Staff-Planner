@@ -7,34 +7,13 @@ import autoTable from 'jspdf-autotable'
 ============================================================ */
 
 const DAYS = [
-    {
-        id: 'monday',
-        name: 'Lunes',
-    },
-    {
-        id: 'tuesday',
-        name: 'Martes',
-    },
-    {
-        id: 'wednesday',
-        name: 'Miércoles',
-    },
-    {
-        id: 'thursday',
-        name: 'Jueves',
-    },
-    {
-        id: 'friday',
-        name: 'Viernes',
-    },
-    {
-        id: 'saturday',
-        name: 'Sábado',
-    },
-    {
-        id: 'sunday',
-        name: 'Domingo',
-    },
+    { id: 'monday', name: 'Lunes' },
+    { id: 'tuesday', name: 'Martes' },
+    { id: 'wednesday', name: 'Miércoles' },
+    { id: 'thursday', name: 'Jueves' },
+    { id: 'friday', name: 'Viernes' },
+    { id: 'saturday', name: 'Sábado' },
+    { id: 'sunday', name: 'Domingo' },
 ]
 
 
@@ -45,21 +24,80 @@ const DAYS = [
 const LUNCH_TIMES = [
     {
         shift: 1,
-        label: '12:30',
+        start: '12:30',
+        end: '13:30',
     },
     {
         shift: 2,
-        label: '13:30',
+        start: '13:30',
+        end: '14:30',
     },
     {
         shift: 3,
-        label: '14:30',
+        start: '14:30',
+        end: '15:30',
     },
     {
         shift: 4,
-        label: '15:30',
+        start: '15:30',
+        end: '16:30',
     },
 ]
+
+
+/* ============================================================
+   CONFIGURACIÓN DE TEXTO
+============================================================ */
+
+/*
+ * ESTE ES EL TAMAÑO PRINCIPAL DE LA LETRA
+ * DE LAS PLANIFICACIONES.
+ *
+ * Puedes modificar estos valores si quieres
+ * hacer la letra más grande o pequeña.
+ */
+
+const FONT_SIZE_ACTIVITIES = 10
+
+const FONT_SIZE_LUNCH = 7.2
+
+const FONT_SIZE_ZONES = 6.5
+
+
+/*
+ * Tamaño de letra de los nombres de los días
+ */
+
+const FONT_SIZE_DAY = 9
+
+
+/* ============================================================
+   COLORES
+============================================================ */
+
+const COLORS = {
+
+    purple: [91, 45, 190],
+
+    purpleLight: [245, 241, 255],
+
+    green: [15, 145, 75],
+
+    greenLight: [235, 250, 240],
+
+    orange: [245, 105, 0],
+
+    orangeLight: [255, 244, 228],
+
+    dark: [25, 25, 25],
+
+    gray: [100, 100, 100],
+
+    border: [35, 35, 35],
+
+    white: [255, 255, 255],
+
+}
 
 
 /* ============================================================
@@ -79,14 +117,9 @@ function safeText(value) {
 }
 
 
-/* ============================================================
-   FECHA
-============================================================ */
-
 function formatDate() {
 
-    const date =
-        new Date()
+    const date = new Date()
 
     return date.toLocaleDateString(
         'es-EC',
@@ -100,103 +133,10 @@ function formatDate() {
 
 
 /* ============================================================
-   NORMALIZAR TEXTO
-   Se utiliza para reconocer las zonas aunque
-   tengan pequeñas diferencias de escritura.
-============================================================ */
-
-function normalizeText(value) {
-
-    return safeText(value)
-        .normalize('NFD')
-        .replace(
-            /[\u0300-\u036f]/g,
-            ''
-        )
-        .toLowerCase()
-        .trim()
-}
-
-
-/* ============================================================
-   OBTENER ZONA
-============================================================ */
-
-function getZoneKey(zoneName) {
-
-    const zone =
-        normalizeText(zoneName)
-
-
-    /*
-     * Accesorios / Espejos
-     */
-
-    if (
-        zone.includes('acc') ||
-        zone.includes('espejo')
-    ) {
-        return 'acc'
-    }
-
-
-    /*
-     * Zona 1
-     */
-
-    if (
-        zone.includes('zona 1') ||
-        zone === '1'
-    ) {
-        return 'zone1'
-    }
-
-
-    /*
-     * Zona 2
-     */
-
-    if (
-        zone.includes('zona 2') ||
-        zone === '2'
-    ) {
-        return 'zone2'
-    }
-
-
-    /*
-     * Zona 3
-     */
-
-    if (
-        zone.includes('zona 3') ||
-        zone === '3'
-    ) {
-        return 'zone3'
-    }
-
-
-    /*
-     * Zona 4
-     */
-
-    if (
-        zone.includes('zona 4') ||
-        zone === '4'
-    ) {
-        return 'zone4'
-    }
-
-
-    return 'other'
-}
-
-
-/* ============================================================
    ENCABEZADO GENERAL
 ============================================================ */
 
-function addHeader(
+function addPageHeader(
     doc,
     title,
     subtitle
@@ -207,7 +147,29 @@ function addHeader(
 
 
     /*
-     * Logo / nombre
+     * Logo Nike estilizado
+     */
+
+    doc.setFont(
+        'helvetica',
+        'bold'
+    )
+
+    doc.setFontSize(14)
+
+    doc.setTextColor(
+        ...COLORS.dark
+    )
+
+    doc.text(
+        'NIKE STAFF PLANNER',
+        14,
+        15
+    )
+
+
+    /*
+     * Título
      */
 
     doc.setFont(
@@ -218,34 +180,13 @@ function addHeader(
     doc.setFontSize(10)
 
     doc.setTextColor(
-        30,
-        30,
-        30
-    )
-
-    doc.text(
-        'NIKE STAFF PLANNER',
-        15,
-        12
-    )
-
-
-    /*
-     * Título
-     */
-
-    doc.setFontSize(19)
-
-    doc.setTextColor(
-        20,
-        20,
-        20
+        ...COLORS.dark
     )
 
     doc.text(
         title,
         pageWidth / 2,
-        17,
+        15,
         {
             align: 'center',
         }
@@ -258,21 +199,15 @@ function addHeader(
 
     doc.setFont(
         'helvetica',
-        'normal'
+        'bold'
     )
 
-    doc.setFontSize(8)
-
-    doc.setTextColor(
-        100,
-        100,
-        100
-    )
+    doc.setFontSize(8.5)
 
     doc.text(
         subtitle,
         pageWidth / 2,
-        23,
+        21,
         {
             align: 'center',
         }
@@ -283,12 +218,21 @@ function addHeader(
      * Fecha
      */
 
+    doc.setFont(
+        'helvetica',
+        'normal'
+    )
+
     doc.setFontSize(7)
+
+    doc.setTextColor(
+        ...COLORS.gray
+    )
 
     doc.text(
         `Generado: ${formatDate()}`,
-        pageWidth - 15,
-        12,
+        pageWidth - 14,
+        15,
         {
             align: 'right',
         }
@@ -296,64 +240,70 @@ function addHeader(
 
 
     /*
-     * Línea separadora
+     * Línea decorativa
      */
 
     doc.setDrawColor(
-        210,
-        210,
-        210
+        ...COLORS.green
     )
 
     doc.setLineWidth(
-        0.3
+        0.8
     )
 
     doc.line(
-        15,
+        14,
         27,
-        pageWidth - 15,
+        pageWidth - 14,
         27
     )
 }
 
 
 /* ============================================================
-   TÍTULO DE SECCIÓN
+   BARRA DE SECCIÓN
 ============================================================ */
 
 function addSectionTitle(
     doc,
-    title,
-    y
+    {
+        y,
+        title,
+        color,
+        icon = '',
+    }
 ) {
 
     const pageWidth =
         doc.internal.pageSize.getWidth()
 
+    const margin = 14
+
+    const width =
+        pageWidth - margin * 2
+
+
     /*
-     * Barra de sección
+     * Fondo
      */
 
     doc.setFillColor(
-        20,
-        185,
-        155
+        ...color
     )
 
     doc.roundedRect(
-        15,
+        margin,
         y,
-        pageWidth - 30,
-        7,
-        1.5,
-        1.5,
+        width,
+        13,
+        3,
+        3,
         'F'
     )
 
 
     /*
-     * Texto
+     * Icono / símbolo
      */
 
     doc.setFont(
@@ -361,22 +311,35 @@ function addSectionTitle(
         'bold'
     )
 
-    doc.setFontSize(9)
+    doc.setFontSize(11)
 
     doc.setTextColor(
-        255,
-        255,
-        255
+        ...COLORS.white
     )
 
     doc.text(
-        title,
-        19,
-        y + 4.8
+        icon,
+        margin + 6,
+        y + 8.7
     )
 
 
-    return y + 10
+    /*
+     * Título
+     */
+
+    doc.setFont(
+        'helvetica',
+        'bold'
+    )
+
+    doc.setFontSize(15)
+
+    doc.text(
+        title,
+        margin + 15,
+        y + 8.8
+    )
 }
 
 
@@ -386,7 +349,8 @@ function addSectionTitle(
 
 function addFooter(
     doc,
-    pageNumber
+    pageNumber,
+    totalPages
 ) {
 
     const pageWidth =
@@ -396,49 +360,70 @@ function addFooter(
         doc.internal.pageSize.getHeight()
 
 
+    /*
+     * Línea
+     */
+
     doc.setDrawColor(
-        220,
-        220,
-        220
+        ...COLORS.green
     )
 
     doc.setLineWidth(
-        0.25
+        0.7
     )
 
     doc.line(
-        15,
-        pageHeight - 11,
-        pageWidth - 15,
-        pageHeight - 11
+        14,
+        pageHeight - 17,
+        pageWidth - 14,
+        pageHeight - 17
     )
 
 
+    /*
+     * Ubicación
+     */
+
     doc.setFont(
         'helvetica',
-        'normal'
+        'bold'
     )
 
     doc.setFontSize(7)
 
     doc.setTextColor(
-        120,
-        120,
-        120
+        ...COLORS.dark
+    )
+
+    doc.text(
+        'Nike Quicentro',
+        14,
+        pageHeight - 8
     )
 
 
+    /*
+     * Nombre
+     */
+
     doc.text(
-        'Nike Staff Planner • Quicentro',
-        15,
-        pageHeight - 6
+        'Nike Staff Planner',
+        pageWidth / 2,
+        pageHeight - 8,
+        {
+            align: 'center',
+        }
     )
 
 
+    /*
+     * Página
+     */
+
     doc.text(
-        `Página ${pageNumber} de 2`,
-        pageWidth - 15,
-        pageHeight - 6,
+        `Página ${pageNumber} de ${totalPages}`,
+        pageWidth - 14,
+        pageHeight - 8,
         {
             align: 'right',
         }
@@ -447,61 +432,44 @@ function addFooter(
 
 
 /* ============================================================
-   OBTENER ASIGNACIÓN DE UN DÍA
-============================================================ */
-
-function findAssignmentByDay(
-    assignments,
-    dayId
-) {
-
-    if (
-        !Array.isArray(
-            assignments
-        )
-    ) {
-        return null
-    }
-
-
-    return assignments.find(
-        (assignment) =>
-            assignment?.day === dayId
-    ) || null
-}
-
-
-/* ============================================================
    PÁGINA 1
    A15 + LIMPIEZA
+   HORIZONTAL
 ============================================================ */
 
-function buildActivitiesPage(
+function addActivitiesPage(
     doc,
     a15Assignments,
     cleaningAssignments
 ) {
 
-    addHeader(
+    /*
+     * La primera página se crea horizontalmente.
+     */
+
+    addPageHeader(
         doc,
         'PLANIFICACIÓN DE ACTIVIDADES',
         'Distribución semanal de A15 y Limpieza'
     )
 
 
-    let currentY = 33
+    /*
+     * Título de sección
+     */
 
-
-    currentY =
-        addSectionTitle(
-            doc,
-            'A15 Y LIMPIEZA',
-            currentY
-        )
+    addSectionTitle(
+        doc,
+        {
+            y: 34,
+            title: 'A15 Y LIMPIEZA',
+            color: COLORS.purple,
+        }
+    )
 
 
     /*
-     * Construir las 7 filas
+     * Construcción de filas
      */
 
     const rows = []
@@ -511,16 +479,18 @@ function buildActivitiesPage(
         (day) => {
 
             const a15 =
-                findAssignmentByDay(
-                    a15Assignments,
-                    day.id
+                a15Assignments?.find(
+                    (assignment) =>
+                        assignment.day ===
+                        day.id
                 )
 
 
             const cleaning =
-                findAssignmentByDay(
-                    cleaningAssignments,
-                    day.id
+                cleaningAssignments?.find(
+                    (assignment) =>
+                        assignment.day ===
+                        day.id
                 )
 
 
@@ -538,7 +508,7 @@ function buildActivitiesPage(
                     ? safeText(
                         a15.start
                     )
-                    : '—',
+                    : '',
 
                 cleaning
                     ? safeText(
@@ -550,644 +520,749 @@ function buildActivitiesPage(
                     ? safeText(
                         cleaning.start
                     )
-                    : '—',
+                    : '',
 
             ])
+
         }
     )
 
 
+    /*
+     * Tabla
+     */
+
     autoTable(
         doc,
         {
-            startY: currentY,
 
-            head: [
-                [
-                    'DÍA',
-                    'A15',
-                    'INGRESO',
-                    'LIMPIEZA',
-                    'INGRESO',
-                ],
-            ],
+            startY: 51,
+
+            head: [[
+                'DÍA',
+                'A15',
+                'INGRESO',
+                'LIMPIEZA',
+                'INGRESO',
+            ]],
 
             body: rows,
 
             theme: 'grid',
 
-            margin: {
-                left: 15,
-                right: 15,
-            },
-
             styles: {
-                font: 'helvetica',
-                fontSize: 9,
-                cellPadding: 5,
-                valign: 'middle',
-                lineColor: [
-                    220,
-                    220,
-                    220,
-                ],
-                lineWidth: 0.25,
-                textColor: [
-                    60,
-                    60,
-                    60,
-                ],
+
+                font:
+                    'helvetica',
+
+                fontSize:
+                    FONT_SIZE_ACTIVITIES,
+
+                cellPadding:
+                    4.5,
+
+                textColor:
+                    COLORS.dark,
+
+                lineColor:
+                    COLORS.border,
+
+                lineWidth:
+                    0.35,
+
+                valign:
+                    'middle',
+
             },
 
             headStyles: {
-                fillColor: [
-                    20,
-                    185,
-                    155,
-                ],
 
-                textColor: [
-                    255,
-                    255,
-                    255,
-                ],
+                fillColor:
+                    COLORS.purple,
 
-                fontStyle: 'bold',
+                textColor:
+                    COLORS.white,
 
-                fontSize: 8,
+                fontStyle:
+                    'bold',
 
-                halign: 'center',
+                fontSize:
+                    10,
 
-                valign: 'middle',
+                halign:
+                    'center',
 
-                cellPadding: 4,
-            },
+                valign:
+                    'middle',
 
-            bodyStyles: {
-                minCellHeight: 12,
             },
 
             alternateRowStyles: {
-                fillColor: [
-                    248,
-                    250,
-                    250,
-                ],
+
+                fillColor:
+                    COLORS.purpleLight,
+
             },
 
             columnStyles: {
 
                 0: {
-                    cellWidth: 30,
-                    halign: 'center',
+                    cellWidth: 34,
                     fontStyle: 'bold',
+                    halign: 'center',
                 },
 
                 1: {
-                    cellWidth: 65,
+                    cellWidth: 76,
                 },
 
                 2: {
-                    cellWidth: 30,
+                    cellWidth: 25,
                     halign: 'center',
                 },
 
                 3: {
-                    cellWidth: 65,
+                    cellWidth: 76,
                 },
 
                 4: {
-                    cellWidth: 30,
+                    cellWidth: 25,
                     halign: 'center',
                 },
 
             },
+
+            margin: {
+
+                left: 14,
+
+                right: 14,
+
+                bottom: 24,
+
+            },
+
         }
     )
 
 
     /*
-     * Nota inferior
+     * Mensaje inferior
      */
 
-    const finalY =
-        doc.lastAutoTable.finalY
+    // const finalY =
+    //     doc.lastAutoTable.finalY
 
 
-    doc.setFont(
-        'helvetica',
-        'normal'
-    )
+    // doc.setFillColor(
+    //     ...COLORS.purpleLight
+    // )
 
-    doc.setFontSize(7)
+    // doc.setDrawColor(
+    //     ...COLORS.purple
+    // )
 
-    doc.setTextColor(
-        110,
-        110,
-        110
-    )
-
-
-    doc.text(
-        'Las asignaciones se generan automáticamente según las reglas de planificación configuradas.',
-        15,
-        finalY + 9
-    )
+    // doc.roundedRect(
+    //     18,
+    //     finalY + 12,
+    //     doc.internal.pageSize.getWidth() - 36,
+    //     15,
+    //     3,
+    //     3,
+    //     'FD'
+    // )
 
 
-    /*
-     * Pie
-     */
+    // doc.setFont(
+    //     'helvetica',
+    //     'normal'
+    // )
 
-    addFooter(
-        doc,
-        1
-    )
-}
+    // doc.setFontSize(8)
 
+    // doc.setTextColor(
+    //     ...COLORS.dark
+    // )
 
-/* ============================================================
-   CONSTRUIR TEXTO DE ALMUERZOS
-============================================================ */
-
-function getLunchPeople(
-    result,
-    shift
-) {
-
-    const assignments =
-        result?.assignments || []
-
-
-    const people =
-        assignments.filter(
-            (assignment) =>
-                Number(
-                    assignment?.lunchShift
-                ) === shift
-        )
-
-
-    if (
-        people.length === 0
-    ) {
-        return '—'
-    }
-
-
-    return people
-        .map(
-            (person) =>
-                safeText(
-                    person.employeeName
-                )
-        )
-        .join('\n')
-}
-
-
-/* ============================================================
-   CONSTRUIR TEXTO DE ZONAS
-============================================================ */
-
-function getZonePeople(
-    result,
-    zoneKey
-) {
-
-    const assignments =
-        result?.assignments || []
-
-
-    const people =
-        assignments.filter(
-            (assignment) =>
-                getZoneKey(
-                    assignment?.zoneName
-                ) === zoneKey
-        )
-
-
-    if (
-        people.length === 0
-    ) {
-        return '—'
-    }
-
-
-    return people
-        .map(
-            (person) => {
-
-                const name =
-                    safeText(
-                        person.employeeName
-                    )
-
-
-                const start =
-                    safeText(
-                        person.start
-                    )
-
-
-                return start
-                    ? `${name}\n${start}`
-                    : name
-            }
-        )
-        .join('\n\n')
+    // doc.text(
+    //     '- Las asignaciones se generan automáticamente según las reglas de planificación configuradas.',
+    //     25,
+    //     finalY + 21
+    // )
 }
 
 
 /* ============================================================
    PÁGINA 2
    ALMUERZOS + ZONAS
+   VERTICAL
 ============================================================ */
 
-function buildLunchAndZonesPage(
+function addOperationsPage(
     doc,
     lunchAssignments,
     zoneAssignments
 ) {
 
-    addHeader(
+    /*
+     * IMPORTANTE:
+     *
+     * Esta página es vertical.
+     */
+
+    addPageHeader(
         doc,
         'PLANIFICACIÓN DE OPERACIONES',
         'Distribución de almuerzos y zonas del piso de ventas'
     )
 
 
-    let currentY = 33
-
-
     /* ========================================================
        ALMUERZOS
     ======================================================== */
 
-    currentY =
-        addSectionTitle(
-            doc,
-            'ALMUERZOS',
-            currentY
-        )
-
-
-    /*
-     * Una sola fila por día.
-     * Cada columna representa un turno.
-     */
-
-    const lunchRows =
-        DAYS.map(
-            (day) => {
-
-                const result =
-                    lunchAssignments?.[
-                        day.id
-                    ]
-
-
-                return [
-
-                    day.name,
-
-                    getLunchPeople(
-                        result,
-                        1
-                    ),
-
-                    getLunchPeople(
-                        result,
-                        2
-                    ),
-
-                    getLunchPeople(
-                        result,
-                        3
-                    ),
-
-                    getLunchPeople(
-                        result,
-                        4
-                    ),
-
-                ]
-            }
-        )
-
-
-    autoTable(
+    addSectionTitle(
         doc,
         {
-            startY: currentY,
-
-            head: [
-                [
-                    'DÍA',
-                    '12:30 - 13:30',
-                    '13:30 - 14:30',
-                    '14:30 - 15:30',
-                    '15:30 - 16:30',
-                ],
-            ],
-
-            body: lunchRows,
-
-            theme: 'grid',
-
-            margin: {
-                left: 15,
-                right: 15,
-            },
-
-            styles: {
-                font: 'helvetica',
-
-                fontSize: 6.5,
-
-                cellPadding: 2.5,
-
-                valign: 'middle',
-
-                lineColor: [
-                    220,
-                    220,
-                    220,
-                ],
-
-                lineWidth: 0.25,
-
-                textColor: [
-                    60,
-                    60,
-                    60,
-                ],
-
-                overflow: 'linebreak',
-            },
-
-            headStyles: {
-
-                fillColor: [
-                    20,
-                    185,
-                    155,
-                ],
-
-                textColor: [
-                    255,
-                    255,
-                    255,
-                ],
-
-                fontStyle: 'bold',
-
-                fontSize: 6.5,
-
-                halign: 'center',
-
-                valign: 'middle',
-
-                cellPadding: 3,
-            },
-
-            alternateRowStyles: {
-                fillColor: [
-                    248,
-                    250,
-                    250,
-                ],
-            },
-
-            columnStyles: {
-
-                0: {
-                    cellWidth: 28,
-                    halign: 'center',
-                    fontStyle: 'bold',
-                },
-
-                1: {
-                    cellWidth: 61,
-                },
-
-                2: {
-                    cellWidth: 61,
-                },
-
-                3: {
-                    cellWidth: 61,
-                },
-
-                4: {
-                    cellWidth: 61,
-                },
-
-            },
+            y: 33,
+            title: 'ALMUERZOS',
+            color: COLORS.green,
         }
     )
 
 
     /*
-     * Siguiente sección
+     * Construir una sola fila por día.
+     *
+     * Cada columna corresponde a un horario.
+     * Esto ahorra muchísimo espacio vertical.
      */
 
-    currentY =
-        doc.lastAutoTable.finalY +
-        8
+    const lunchRows = []
+
+
+    DAYS.forEach(
+        (day) => {
+
+            const result =
+                lunchAssignments?.[
+                    day.id
+                ]
+
+
+            const assignments =
+                result?.assignments ||
+                []
+
+
+            const cells = []
+
+
+            LUNCH_TIMES.forEach(
+                (time) => {
+
+                    const people =
+                        assignments.filter(
+                            (assignment) =>
+                                assignment.lunchShift ===
+                                time.shift
+                        )
+
+
+                    if (
+                        people.length ===
+                        0
+                    ) {
+
+                        cells.push(
+                            '—'
+                        )
+
+                        return
+                    }
+
+
+                    const names =
+                        people.map(
+                            (person) =>
+                                safeText(
+                                    person.employeeName
+                                )
+                        )
+
+
+                    cells.push(
+                        names.join(
+                            '\n'
+                        )
+                    )
+
+                }
+            )
+
+
+            lunchRows.push([
+                day.name,
+                ...cells,
+            ])
+
+        }
+    )
+
+
+    autoTable(
+        doc,
+        {
+
+            startY: 49,
+
+            head: [[
+
+                'DÍA',
+
+                '12:30 - 13:30',
+
+                '13:30 - 14:30',
+
+                '14:30 - 15:30',
+
+                '15:30 - 16:30',
+
+            ]],
+
+            body:
+                lunchRows,
+
+            theme:
+                'grid',
+
+            styles: {
+
+                font:
+                    'helvetica',
+
+                fontSize:
+                    FONT_SIZE_LUNCH,
+
+                cellPadding:
+                    2.8,
+
+                textColor:
+                    COLORS.dark,
+
+                lineColor:
+                    COLORS.border,
+
+                lineWidth:
+                    0.35,
+
+                valign:
+                    'middle',
+
+            },
+
+            headStyles: {
+
+                fillColor:
+                    COLORS.green,
+
+                textColor:
+                    COLORS.white,
+
+                fontStyle:
+                    'bold',
+
+                fontSize:
+                    7.5,
+
+                halign:
+                    'center',
+
+                valign:
+                    'middle',
+
+            },
+
+            alternateRowStyles: {
+
+                fillColor:
+                    COLORS.greenLight,
+
+            },
+
+            columnStyles: {
+
+                0: {
+
+                    cellWidth:
+                        25,
+
+                    fontStyle:
+                        'bold',
+
+                    halign:
+                        'center',
+
+                },
+
+                1: {
+                    cellWidth:
+                        38,
+                },
+
+                2: {
+                    cellWidth:
+                        38,
+                },
+
+                3: {
+                    cellWidth:
+                        38,
+                },
+
+                4: {
+                    cellWidth:
+                        38,
+                },
+
+            },
+
+            margin: {
+
+                left:
+                    14,
+
+                right:
+                    14,
+
+                bottom:
+                    15,
+
+            },
+
+        }
+    )
+
+
+    /*
+     * Posición después de almuerzos
+     */
+
+    let currentY =
+        doc.lastAutoTable.finalY + 6
 
 
     /* ========================================================
        ZONAS
     ======================================================== */
 
-    currentY =
-        addSectionTitle(
-            doc,
-            'ZONAS DEL PISO DE VENTAS',
-            currentY
-        )
+    addSectionTitle(
+        doc,
+        {
+            y:
+                currentY,
+
+            title:
+                'ZONAS DEL PISO DE VENTAS',
+
+            color:
+                COLORS.orange,
+        }
+    )
+
+
+    currentY += 16
 
 
     /*
-     * Tabla compacta de zonas.
+     * Construcción de filas.
      *
-     * Cada fila = un día.
+     * IMPORTANTE:
      *
-     * Cada celda contiene los nombres
-     * asignados a esa zona.
+     * Aquí NO mostramos hora de ingreso,
+     * porque eso fue lo que permitió que
+     * las zonas entren completas en la página.
      */
 
-    const zoneRows =
-        DAYS.map(
-            (day) => {
-
-                const result =
-                    zoneAssignments?.[
-                        day.id
-                    ]
+    const zoneRows = []
 
 
-                return [
+    DAYS.forEach(
+        (day) => {
 
-                    day.name,
-
-                    getZonePeople(
-                        result,
-                        'zone1'
-                    ),
-
-                    getZonePeople(
-                        result,
-                        'zone2'
-                    ),
-
-                    getZonePeople(
-                        result,
-                        'zone3'
-                    ),
-
-                    getZonePeople(
-                        result,
-                        'zone4'
-                    ),
-
-                    getZonePeople(
-                        result,
-                        'acc'
-                    ),
-
+            const result =
+                zoneAssignments?.[
+                    day.id
                 ]
+
+
+            const assignments =
+                result?.assignments ||
+                []
+
+
+            const byZone = {
+
+                zone1:
+                    [],
+
+                zone2:
+                    [],
+
+                zone3:
+                    [],
+
+                zone4:
+                    [],
+
+                accessories:
+                    [],
+
             }
-        )
+
+
+            assignments.forEach(
+                (assignment) => {
+
+                    const zone =
+                        safeText(
+                            assignment.zoneName
+                        ).toLowerCase()
+
+
+                    let target =
+                        null
+
+
+                    if (
+                        zone.includes(
+                            'zona 1'
+                        )
+                    ) {
+
+                        target =
+                            byZone.zone1
+
+                    } else if (
+                        zone.includes(
+                            'zona 2'
+                        )
+                    ) {
+
+                        target =
+                            byZone.zone2
+
+                    } else if (
+                        zone.includes(
+                            'zona 3'
+                        )
+                    ) {
+
+                        target =
+                            byZone.zone3
+
+                    } else if (
+                        zone.includes(
+                            'zona 4'
+                        )
+                    ) {
+
+                        target =
+                            byZone.zone4
+
+                    } else {
+
+                        target =
+                            byZone.accessories
+
+                    }
+
+
+                    if (
+                        target
+                    ) {
+
+                        target.push(
+                            safeText(
+                                assignment.employeeName
+                            )
+                        )
+
+                    }
+
+                }
+            )
+
+
+            zoneRows.push([
+
+                day.name,
+
+                byZone.zone1.join(
+                    '\n'
+                ) || '—',
+
+                byZone.zone2.join(
+                    '\n'
+                ) || '—',
+
+                byZone.zone3.join(
+                    '\n'
+                ) || '—',
+
+                byZone.zone4.join(
+                    '\n'
+                ) || '—',
+
+                byZone.accessories.join(
+                    '\n'
+                ) || '—',
+
+            ])
+
+        }
+    )
 
 
     autoTable(
         doc,
         {
-            startY: currentY,
 
-            head: [
-                [
-                    'DÍA',
-                    'ZONA 1',
-                    'ZONA 2',
-                    'ZONA 3',
-                    'ZONA 4',
-                    'ACC. / ESPEJOS',
-                ],
-            ],
+            startY:
+                currentY,
 
-            body: zoneRows,
+            head: [[
 
-            theme: 'grid',
+                'DÍA',
 
-            margin: {
-                left: 15,
-                right: 15,
-            },
+                'ZONA 1',
+
+                'ZONA 2',
+
+                'ZONA 3',
+
+                'ZONA 4',
+
+                'ACC/ESPEJOS',
+
+            ]],
+
+            body:
+                zoneRows,
+
+            theme:
+                'grid',
 
             styles: {
 
-                font: 'helvetica',
+                font:
+                    'helvetica',
 
-                fontSize: 6.2,
+                fontSize:
+                    FONT_SIZE_ZONES,
 
-                cellPadding: 2.3,
+                cellPadding:
+                    2.4,
 
-                valign: 'middle',
+                textColor:
+                    COLORS.dark,
 
-                lineColor: [
-                    220,
-                    220,
-                    220,
-                ],
+                lineColor:
+                    COLORS.border,
 
-                lineWidth: 0.25,
+                lineWidth:
+                    0.35,
 
-                textColor: [
-                    60,
-                    60,
-                    60,
-                ],
+                valign:
+                    'middle',
 
-                overflow: 'linebreak',
             },
 
             headStyles: {
 
-                fillColor: [
-                    20,
-                    185,
-                    155,
-                ],
+                fillColor:
+                    COLORS.orange,
 
-                textColor: [
-                    255,
-                    255,
-                    255,
-                ],
+                textColor:
+                    COLORS.white,
 
-                fontStyle: 'bold',
+                fontStyle:
+                    'bold',
 
-                fontSize: 6.2,
+                fontSize:
+                    6.2,
 
-                halign: 'center',
+                halign:
+                    'center',
 
-                valign: 'middle',
+                valign:
+                    'middle',
 
-                cellPadding: 3,
             },
 
             alternateRowStyles: {
-                fillColor: [
-                    248,
-                    250,
-                    250,
-                ],
+
+                fillColor:
+                    COLORS.orangeLight,
+
             },
 
             columnStyles: {
 
                 0: {
-                    cellWidth: 25,
-                    halign: 'center',
-                    fontStyle: 'bold',
+
+                    cellWidth:
+                        20,
+
+                    fontStyle:
+                        'bold',
+
+                    halign:
+                        'center',
+
                 },
 
                 1: {
-                    cellWidth: 51,
+                    cellWidth:
+                        34,
                 },
 
                 2: {
-                    cellWidth: 51,
+                    cellWidth:
+                        34,
                 },
 
                 3: {
-                    cellWidth: 51,
+                    cellWidth:
+                        34,
                 },
 
                 4: {
-                    cellWidth: 51,
+                    cellWidth:
+                        34,
                 },
 
                 5: {
-                    cellWidth: 57,
+                    cellWidth:
+                        26,
                 },
 
             },
+
+            margin: {
+
+                left:
+                    14,
+
+                right:
+                    14,
+
+                bottom:
+                    20,
+
+            },
+
         }
-    )
-
-
-    /*
-     * Pie
-     */
-
-    addFooter(
-        doc,
-        2
     )
 }
 
@@ -1212,33 +1287,34 @@ export function openPlanningPDF({
 
         /*
          * ====================================================
-         * DOCUMENTO A4 HORIZONTAL
-         * ====================================================
+         * PÁGINA 1
          *
-         * Landscape nos permite tener suficiente ancho
-         * para las tablas de almuerzos y zonas.
+         * HORIZONTAL
+         * ====================================================
          */
 
         const doc =
             new jsPDF({
 
-                orientation: 'landscape',
+                orientation:
+                    'landscape',
 
-                unit: 'mm',
+                unit:
+                    'mm',
 
-                format: 'a4',
+                format:
+                    'a4',
 
             })
 
 
         /*
-         * ====================================================
-         * PÁGINA 1
-         * A15 + LIMPIEZA
-         * ====================================================
+         * Página 1:
+         *
+         * A15 + Limpieza
          */
 
-        buildActivitiesPage(
+        addActivitiesPage(
             doc,
             a15Assignments,
             cleaningAssignments
@@ -1248,18 +1324,62 @@ export function openPlanningPDF({
         /*
          * ====================================================
          * PÁGINA 2
-         * ALMUERZOS + ZONAS
+         *
+         * VERTICAL
          * ====================================================
+         *
+         * Esta es la parte importante:
+         *
+         * jsPDF permite crear la siguiente página
+         * con orientación diferente.
          */
 
-        doc.addPage()
+        doc.addPage(
+            'a4',
+            'portrait'
+        )
 
 
-        buildLunchAndZonesPage(
+        /*
+         * Página 2:
+         *
+         * Almuerzos + Zonas
+         */
+
+        addOperationsPage(
             doc,
             lunchAssignments,
             zoneAssignments
         )
+
+
+        /*
+         * ====================================================
+         * PIE DE PÁGINA
+         * ====================================================
+         */
+
+        const totalPages =
+            doc.internal.getNumberOfPages()
+
+
+        for (
+            let page = 1;
+            page <= totalPages;
+            page++
+        ) {
+
+            doc.setPage(
+                page
+            )
+
+            addFooter(
+                doc,
+                page,
+                totalPages
+            )
+
+        }
 
 
         /*
@@ -1298,24 +1418,25 @@ export function openPlanningPDF({
          * la ventana emergente.
          */
 
-        if (!newWindow) {
+        if (
+            !newWindow
+        ) {
 
             doc.save(
                 'planificacion-semanal.pdf'
             )
 
-
             URL.revokeObjectURL(
                 pdfUrl
             )
 
-
             return
+
         }
 
 
         /*
-         * Liberar URL posteriormente.
+         * Liberar memoria posteriormente.
          */
 
         setTimeout(
@@ -1329,7 +1450,9 @@ export function openPlanningPDF({
             60000
         )
 
-    } catch (error) {
+    } catch (
+        error
+    ) {
 
         console.error(
             'ERROR AL GENERAR PDF:',
@@ -1340,5 +1463,7 @@ export function openPlanningPDF({
         alert(
             'No se pudo generar el PDF de la planificación.'
         )
+
     }
+
 }
